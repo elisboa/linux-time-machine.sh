@@ -53,7 +53,7 @@ function check-env () {
 function create-branch () {
 	
 	# Create new branch
-	dgit checkout -b $(date +'%Y.%m.%d') }
+	dgit checkout -b $(date +'%Y.%m.%d') 
 }
 
 function main () {
