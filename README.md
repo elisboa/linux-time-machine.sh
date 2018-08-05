@@ -19,3 +19,11 @@ alias dgit='git --git-dir ~/.dotfiles/.git' --work-tree $HOME
 5. Monitor log files: tail -f /tmp/dgit*log
 
 6. Report your bugs or post me a pull-request with bufixes
+
+* COMMON BUGS *
+- files in use don't get staged for commit, like:
+  - .bash_history
+  - .viminfo
+  - .xsession-errors
+  
+so you have to forcibly ignore them 
