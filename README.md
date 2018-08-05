@@ -8,6 +8,7 @@ How to use:
 2. With your own user, do a crontab -e and call your scripts. Actually I'm using this
 
 ** ** ** ** ** /home/elisboa/.scripts/dgit-create-branch.sh >> /tmp/dgit-create-branch.sh.log
+
 ** ** ** ** ** /home/elisboa/.scripts/dgit-commit-branch.sh >> /tmp/dgit-commit-branch.sh.log
 
 3. Monitor log files: tail -f /tmp/dgit*log
