@@ -39,7 +39,7 @@ function check-env () {
 	add-files
 
 	# Remove deleted files
-	dgit status && remove-files
+	remove-files
 
 
 	# Go commit the changes
@@ -59,11 +59,10 @@ function remove-files () {
 function add-files () {
 
 	# Add files using find
-	find . -maxdepth 1 -mindepth 1 -not -name '.dotfiles' -not -name '.mozilla' -not -name '.cache' -not -name '.bash_history' -not -name '.xsession-errors' -not -name 'git' -not -name '.viminfo' -not -name '.gnupg' -not -name '.pki' -not -name '.local' - not -iname '*.iso'| while read line ; do dgit add -f "${line}"; done
+	find . -maxdepth 1 -mindepth 1 -not -name '.dotfiles' -not -name '.mozilla' -not -name '.cache' -not -name '.xsession-errors' -not -name 'git' -not -name '.viminfo' -not -name '.gnupg' -not -name '.pki' -not -name '.local' -not -iname '*.iso' -not -iname '*.mp4' -not -iname '*.srt' | while read line ; do dgit add -f "${line}"; done
 	#find . -maxdepth 1 -mindepth 1 -not -name '.dotfiles' -not -name '.mozilla' -not -name '.cache' | while read line ; do dgit add -f "${line}"; done
 
 }
-
 
 function commit-changes () {
 
