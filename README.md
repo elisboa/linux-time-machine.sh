@@ -1,5 +1,7 @@
 # linux-time-machine.sh
-A very, very simple and buggy time machine for Linux written in shell script that uses cron and git
+A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
+
+It avoids some larger files in a very ugly way, for now.
 
 
 How to use:
@@ -26,4 +28,4 @@ alias dgit='git --git-dir ~/.dotfiles/.git' --work-tree $HOME
   - .viminfo
   - .xsession-errors
   
-so you have to forcibly ignore them 
+so you have to forcibly ignore them.
