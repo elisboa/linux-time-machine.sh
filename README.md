@@ -2,6 +2,7 @@
 A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
 
 PS1: You should avoid some larger files for now.
+
 PS2: The add-files function has been disabled, so you have to forcibly add files:
 ```
 dgit add -f ~/my_file
