@@ -6,6 +6,8 @@
 
 # check environment requirements
 function check-env () {
+
+	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
 	
 	echo -e "Checking if working environment is ok"
 
@@ -39,7 +41,7 @@ function check-env () {
 	# Check whether we need a new branch or not
 	if [[ "${CUR_BRANCH}" == "$(date +'%Y.%m.%d')" ]]
 	then
-		echo -e "A new branch is not needed. Exiting now"
+		echo -e "${COMMIT_DATE}: A new branch is not needed. Exiting now"
 		exit 1
 	else
 		echo -e "Creating a new branch"

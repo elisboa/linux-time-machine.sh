@@ -18,7 +18,7 @@ function check-env () {
 	then
 		echo -e "OK"
 	else
-		echo -e "FAIL"
+		echo -e "FAIL: git check"
 		exit 1
 	fi
 
@@ -28,8 +28,8 @@ function check-env () {
 	then
 		echo -e "OK"
 	else
-		echo -e "FAIL"
-		exit 1
+		echo -e "FAIL: dgit check"
+		exit 2
 	fi
 
 	# Check which branch we are
@@ -67,13 +67,22 @@ function add-files () {
 function commit-changes () {
 
 	export EDITOR=$(which nano)
+	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
 
-	# Commit changes to branch	
-	if dgit commit -a -m "Automated commit at $(date +'%Y.%m.%d-%H.%M')"
+	# Check if we need to commit
+	# main command: dgit status | grep 'working tree clean' && echo OK || echo FAIL
+	if dgit status | grep 'working tree clean' > /dev/null 2>&1
 	then
-		echo Commit is ok
+		echo -e "${COMMIT_DATE}: Working tree is clean :)"
 	else
-		echo Commit failed
+		echo -e "Starting commit ${COMMIT_DATE}"
+		# Commit changes to branch
+		if dgit commit -a -m "Automated commit at ${COMMIT_DATE}"
+		then
+			echo Commit is ok
+		else
+			echo Commit failed
+		fi	
 	fi
 
 }
