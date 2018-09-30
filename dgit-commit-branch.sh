@@ -69,7 +69,7 @@ function commit-changes () {
 	export EDITOR=$(which nano)
 
 	# Commit changes to branch	
-	if dgit commit -m "Automated commit at $(date +'%Y.%m.%d-%H.%M')"
+	if dgit commit -a -m "Automated commit at $(date +'%Y.%m.%d-%H.%M')"
 	then
 		echo Commit is ok
 	else
