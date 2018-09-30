@@ -36,7 +36,7 @@ function check-env () {
 	CUR_BRANCH="$(dgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
 	echo -e "Current branch is: ${CUR_BRANCH}"
 	# Go add new files
-	add-files
+	# add-files
 
 	# Remove deleted files
 	remove-files

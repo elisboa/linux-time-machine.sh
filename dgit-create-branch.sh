@@ -18,7 +18,7 @@ function check-env () {
 	then
 		echo -e "OK"
 	else
-		echo -e "FAIL"
+		echo -e "FAIL: git check"
 		exit 1
 	fi
 
@@ -28,8 +28,8 @@ function check-env () {
 	then
 		echo -e "OK"
 	else
-		echo -e "FAIL"
-		exit 1
+		echo -e "FAIL: dgit check"
+		exit 2
 	fi
 
 	# Check which branch we are
@@ -53,7 +53,7 @@ function check-env () {
 function create-branch () {
 	
 	# Create new branch
-	dgit checkout -b $(date +'%Y.%m.%d') 
+	dgit checkout -b $(date +'%Y.%m.%d')
 }
 
 function main () {
