@@ -5,9 +5,14 @@ PS1: You should avoid some larger files for now.
 
 PS2: The add-files function has been disabled, so you have to forcibly add files:
 ```
-dgit add -f ~/my_file
+dgit add -f $HOME/my_file
 ```
 PS3: may be a folder as well
+If you want to remove:
+```
+dgit rm -f --cached -r $HOME/my_dir
+```
+It will not remove the dir or file from disk, only from your dgit repository :)
 
 
 How to use:
@@ -15,26 +20,26 @@ How to use:
 1. Copy your scripts to a place like ~/.scripts
 2. Put an alias in your .bashrc:
 ```
-alias dgit='git --git-dir ~/.dotfiles/.git' --work-tree $HOME
+alias dgit='git --git-dir $HOME/.dotfiles/.git' --work-tree $HOME
 ```
 3. as seen in: https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
 ```
-mkdir -pv ~/.dotfiles
-cd ~/.dotfiles
+mkdir -pv $HOME/.dotfiles
+cd $HOME/.dotfiles
 git init .
 echo "*" > .gitignore
 git add -f .gitignore
 git commit -m "gitignore"
-echo "alias dgit='git --git-dir ~/.dotfiles/.git --work-tree=\$HOME'" >> ~/.bashrc
+echo "alias dgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'" >> $HOME/.bashrc
 cd ~
 dgit reset --hard
 dgit status
 ```
 4. Create and add a file to test it:
 ```
-echo "this is a silly test" > ~/dgittestfile
-dgit add -f ~/dgittestfile
-dgit commit -m "Added ~/dgittestfile"
+echo "this is a silly test" > $HOME/dgittestfile
+dgit add -f $HOME/dgittestfile
+dgit commit -m "Added $HOME/dgittestfile"
 ```
 5. With your own user, do a crontab -e and call your scripts. Actually I'm using this
 ```
