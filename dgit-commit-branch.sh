@@ -77,11 +77,12 @@ function commit-changes () {
 	else
 		echo -e "Starting commit ${COMMIT_DATE}"
 		# Commit changes to branch
-		if dgit commit -a -m "$(dgit status ; echo) Automated commit at ${COMMIT_DATE}"
+		if dgit commit -a -m "$(dgit status | grep \:; echo) Automated commit at ${COMMIT_DATE}"
 		then
 			echo Commit is ok
 		else
 			echo Commit failed
+			exit 3
 		fi	
 	fi
 
@@ -91,5 +92,6 @@ function main () {
 	check-env
 }
 
-
+# Sleep for some seconds, so dgit-create-branch can run first
+sleep 2
 main
