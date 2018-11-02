@@ -41,10 +41,10 @@ function check-env () {
 	# Check whether we need a new branch or not
 	if [[ "${CUR_BRANCH}" == "$(date +'%Y.%m.%d')" ]]
 	then
-		echo -e "${COMMIT_DATE}: A new branch is not needed. Exiting now"
-		exit 1
+		echo -e "${COMMIT_DATE}: A new branch is not needed"
+		exit 3
 	else
-		echo -e "Creating a new branch"
+		echo -e "${COMMIT_DATE}: Creating a new branch"
 		create-branch
 	fi
 	
