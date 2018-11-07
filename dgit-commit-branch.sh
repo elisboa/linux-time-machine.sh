@@ -77,6 +77,7 @@ function commit-changes () {
 	else
 		echo -e "Starting commit ${COMMIT_DATE}"
 		# Commit changes to branch
+		dgit add ~
 		if dgit commit -a -m "$(dgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
 		then
 			echo Commit is ok
