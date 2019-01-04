@@ -4,6 +4,27 @@
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
 # Date: 2018 - 08 - 04
 
+# set some environment vars and aliases
+function set-env () {
+	
+	# creates an alias to dgit, so we can use dgit instead of git to access our customized git environment
+	alias dgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+
+	# if there is no $HOME/dotfiles, create it 
+	mkdir -pv $HOME/.dotfiles
+
+	if [[ -d $HOME/.dotfiles]] && [[ ! -d $HOME/.dotfiles/.git ]]
+		cd $HOME/.dotfiles
+		git init .
+		echo "*" > .gitignore
+		git add -f .gitignore
+		git commit -m "gitignore added with * entry"
+		cd $HOME
+		dgit reset --hard
+		dgit status
+	fi
+}
+
 # check environment requirements
 function check-env () {
 
@@ -59,6 +80,7 @@ function create-branch () {
 }
 
 function main () {
+	set-env
 	check-env
 }
 
