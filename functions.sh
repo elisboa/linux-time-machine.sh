@@ -84,9 +84,6 @@ function create-branch () {
 # Remove from repo files which were removed from the disk
 function remove-files () {
 
-    # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
-	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
-
 	if tmgit status | egrep 'deleted'
 	then
 		# Delete files using tmgit status and tmgit rm
@@ -99,9 +96,6 @@ function commit-changes () {
 
 	export EDITOR=$(which nano)
 	export COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
-
-    # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
-	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 
 	# Check if we need to commit
 	if tmgit status | grep 'working tree clean' > /dev/null 2>&1
