@@ -6,6 +6,7 @@
 
 function main () {
 	set-env
+	create-repo
 	check-env
 	check-branch
 }
