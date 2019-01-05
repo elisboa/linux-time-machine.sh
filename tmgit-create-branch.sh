@@ -12,6 +12,7 @@ function main () {
 }
 
 # Source all functions from functions.sh
-source $HOME/.scripts/functions.sh
+#source $HOME/.scripts/functions.sh
+source $(dirname ${0})/functions.sh
 # Call main function
 main
