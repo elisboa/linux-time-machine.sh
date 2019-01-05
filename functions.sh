@@ -84,7 +84,10 @@ function create-branch () {
 # Remove from repo files which were removed from the disk
 function remove-files () {
 
-	if command tmgit status | egrep 'deleted'
+    # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
+	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+
+	if tmgit status | egrep 'deleted'
 	then
 		# Delete files using tmgit status and tmgit rm
 		tmgit rm --cached -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
@@ -156,7 +159,7 @@ function create-repo () {
             echo "Git commit FAIL. Exiting now"
             exit 1
         fi
-        
+
         cd $HOME
         if tmgit reset --hard
         then
