@@ -52,7 +52,7 @@ function check-env () {
 		echo -e "OK"
 	else
 		echo -e "FAIL: tmgit check"
-		exit 2
+		exit 1
 	fi
 
 }
@@ -66,12 +66,11 @@ function check-branch () {
 	if [[ "${CUR_BRANCH}" == "$(date +'%Y.%m.%d')" ]]
 	then
 		echo -e "${COMMIT_DATE}: A new branch is not needed"
-		exit 3
+		exit 1
 	else
 		echo -e "${COMMIT_DATE}: Creating a new branch"
 		create-branch
-	fi
-	
+	fi	
 }
 
 # create a new branch based on todays' day
