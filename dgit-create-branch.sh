@@ -4,90 +4,13 @@
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
 # Date: 2018 - 08 - 04
 
-# set some environment vars and aliases
-function set-env () {
-	
-	LANG=C
-
-	# creates an alias to dgit, so we can use dgit instead of git to access our customized git environment
-	alias dgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
-
-	# if there is no $HOME/dotfiles, create it 
-	mkdir -pv $HOME/.dotfiles
-
-	if [[ -d $HOME/.dotfiles/.git ]]; then
-		echo "Repository already present"
-	else
-		echo "Creating $HOME repository"
-		cd $HOME/.dotfiles
-		git init .
-		echo "*" > .gitignore
-		git add -f .gitignore
-		git commit -m "gitignore added with * entry"
-		cd $HOME
-		dgit reset --hard
-		dgit status
-	fi
-}
-
-# check environment requirements
-function check-env () {
-
-	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
-	
-	echo -e "Checking if working environment is ok"
-
-	cd $HOME
-	echo -e "Current directory is $PWD"
-
-	# Check whether git is a valid command
-	echo -ne "git status is: "
-	if command git --version > /dev/null 2>&1
-	then
-		echo -e "OK"
-	else
-		echo -e "FAIL: git check"
-		exit 1
-	fi
-
-	# Check whether dgit alias works or not
-	echo -ne "dgit status is: "
-	if dgit --version > /dev/null 2>&1
-	then
-		echo -e "OK"
-	else
-		echo -e "FAIL: dgit check"
-		exit 2
-	fi
-
-	# Check which branch we are
-	CUR_BRANCH="$(dgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
-	echo -e "Current branch is: ${CUR_BRANCH}"
-
-	# Check whether we need a new branch or not
-	if [[ "${CUR_BRANCH}" == "$(date +'%Y.%m.%d')" ]]
-	then
-		echo -e "${COMMIT_DATE}: A new branch is not needed"
-		exit 3
-	else
-		echo -e "${COMMIT_DATE}: Creating a new branch"
-		create-branch
-	fi
-	
-}
-
-
-# create branch
-function create-branch () {
-	
-	# Create new branch
-	dgit checkout -b $(date +'%Y.%m.%d')
-}
-
 function main () {
 	set-env
 	check-env
+	check-branch
 }
 
-
+# Source all functions from functions.sh
+source $HOME/.scripts/functions.sh
+# Call main function
 main

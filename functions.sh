@@ -9,12 +9,14 @@ function set-env () {
     ## Set vars
     # Set commit date based on current time
 	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
+    # Force current language to C, so all git messages are in default english
+    LANG="C"
 	
     ## Set aliases
-	# Creates an alias to dgit, so we can use dgit instead of git to access our customized git environment
-	alias dgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
-
-	# if there is no $HOME/dotfiles, create it 
+	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
+	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+    
+	# if there is no $HOME/dotfiles, create it
 	if command mkdir -p $HOME/.dotfiles
     then
         echo "Successfully created or checked dir $HOME/.dotfiles"
@@ -22,7 +24,6 @@ function set-env () {
         echo "Couldn't create or check dir $HOME/.dotfiles. Exiting now"
         exit 1
     fi
-
 
 }
 
@@ -44,18 +45,21 @@ function check-env () {
 		exit 1
 	fi
 
-	# Check whether dgit alias works or not
-	echo -ne "dgit status is: "
-	if dgit --version > /dev/null 2>&1
+	# Check whether tmgit alias works or not
+	echo -ne "tmgit status is: "
+	if tmgit --version > /dev/null 2>&1
 	then
 		echo -e "OK"
 	else
-		echo -e "FAIL: dgit check"
+		echo -e "FAIL: tmgit check"
 		exit 2
 	fi
 
+}
+
+function check-branch () {
 	# Check which branch we are
-	CUR_BRANCH="$(dgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
+	CUR_BRANCH="$(tmgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
 	echo -e "Current branch is: ${CUR_BRANCH}"
 
 	# Check whether we need a new branch or not
@@ -74,16 +78,16 @@ function check-env () {
 function create-branch () {
 	
 	# Create new branch
-	dgit checkout -b $(date +'%Y.%m.%d')
+	tmgit checkout -b $(date +'%Y.%m.%d')
 }
 
 # Remove from repo files which were removed from the disk
 function remove-files () {
 
-	if dgit status | egrep 'deleted'
+	if command tmgit status | egrep 'deleted'
 	then
-		# Delete files using dgit status and dgit rm
-		dgit rm --cached -f -r $(dgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
+		# Delete files using tmgit status and tmgit rm
+		tmgit rm --cached -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
 	fi
 
 }
@@ -93,14 +97,17 @@ function commit-changes () {
 	export EDITOR=$(which nano)
 	export COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
 
+    # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
+	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+
 	# Check if we need to commit
-	if command dgit status | grep 'working tree clean' > /dev/null 2>&1
+	if tmgit status | grep 'working tree clean' > /dev/null 2>&1
 	then
 		echo -e "${COMMIT_DATE}: Working tree is clean, yay : )"
 	else
 		echo -e "Starting commit ${COMMIT_DATE}"
 		# Commit changes to branch
-		if dgit commit -a -m "$(dgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
+		if tmgit commit -a -m "$(tmgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
 		then
 			echo "Commit is OK!"
 		else
@@ -149,14 +156,15 @@ function create-repo () {
             echo "Git commit FAIL. Exiting now"
             exit 1
         fi
-		cd $HOME
-        if command dgit reset --hard
+        
+        cd $HOME
+        if tmgit reset --hard
         then
-            echo "DGit reset OK"
+            echo "tmgit reset OK"
         else
-            echo "DGit reset FAIL. Exiting now"
+            echo "tmgit reset FAIL. Exiting now"
             exit 1
         fi
-		dgit status
+		tmgit status
 	fi
 }
