@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -i
 ### tmgit.sh
 # This is the main script. It imports all functions from an external file and them run them in a determined order 
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
@@ -6,10 +6,15 @@
 
 # Determines the order which all other functions are called
 function main () {
+    
     check-repo
-    check-env
+    
+    set-vars
+    
     check-branch
+    
     check-commit
+
 }
 
 # Source all functions from functions.sh
