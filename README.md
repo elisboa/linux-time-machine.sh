@@ -2,17 +2,14 @@
 A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
 
 All you have to do is run manually:
-0. alias tmgit='git --git-dir $HOME/.dotfiles/.git' --work-tree $HOME
-1. tmgit-create-branch.sh
-2. tmgit-commit-branch.sh
+./tmgit.sh
 
-If you must, you should edit your crontab to add them, so you would have them run automatically:
+If you must, you should edit your crontab to add the script, so you can run it automatically:
 ```
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/dgit-create-branch.sh >> /tmp/tmgit-create-branch.sh.log
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/dgit-commit-branch.sh >> /tmp/tmgit-commit-branch.sh.log
+** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit.sh >> /tmp/tmgit.sh.log 2>&1
 ```
 
-You must manually add files or folders to you tmgit repository: 
+You must manually (and forcibly) add files or folders to you tmgit repository:
 ```
 tmgit add -f $HOME/my_file
 tmgit add -f $HOME/my_folder
@@ -37,23 +34,20 @@ git init .
 echo "*" > .gitignore
 git add -f .gitignore
 git commit -m "gitignore"
-echo "alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'" >> $HOME/.bashrc
+alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
 cd ~
 tmgit reset --hard
 tmgit status
 ```
 
+You now have a customized git repository pointing to your $HOME directory. However, as seen above, it ignores ALL files on your home directory, so you don't add anything by accident. You will only version what you explictitly add. 
+
 You can create and add a file to test it:
 ```
+alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
 echo "this is a silly test" > $HOME/tmgit_test_file
-dgit add -f $HOME/tmgit_test_file
-dgit commit -m "Added $HOME/tmgit_test_file"
-```
-
-With your own user, do a `crontab -e` and call your scripts. Actually I'm using this:
-```
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit-create-branch.sh >> /tmp/tmgit-create-branch.sh.log
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit-commit-branch.sh >> /tmp/tmgit-commit-branch.sh.log
+tmgit add -f $HOME/tmgit_test_file
+tmgit commit -m "Added $HOME/tmgit_test_file"
 ```
 
 Monitor log files: tail -f /tmp/tmgit*log
