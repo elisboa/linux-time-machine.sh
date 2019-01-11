@@ -7,24 +7,21 @@
 function set-env () {
 
     ## Set vars
+	# Check which branch we are
+	CUR_BRANCH="$(tmgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
+
+	# Check which day is today
+	TODAY_DATE="$(date +'%Y.%m.%d')"
+
     # Set commit date based on current time
 	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
     # Force current language to C, so all git messages are in default english
     LANG="C"
-	
+
     ## Set aliases
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
-    
-	# if there is no $HOME/dotfiles, create it
-	if command mkdir -p $HOME/.dotfiles
-    then
-        echo "Successfully created or checked dir $HOME/.dotfiles"
-    else
-        echo "Couldn't create or check dir $HOME/.dotfiles. Exiting now"
-        exit 1
-    fi
-
+ 
 }
 
 # Check all environment requirements
@@ -55,15 +52,18 @@ function check-env () {
 		exit 1
 	fi
 
+	echo -e "All checked, now setting env"
+	set-env
+
 }
 
 function check-branch () {
-	# Check which branch we are
-	CUR_BRANCH="$(tmgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
+
 	echo -e "Current branch is: ${CUR_BRANCH}"
 
 	# Check whether we need a new branch or not
-	if [[ "${CUR_BRANCH}" == "$(date +'%Y.%m.%d')" ]]
+	if [[ "${CUR_BRANCH}" == "${TODAY_DATE}" ]]
+	
 	then
 		echo -e "${COMMIT_DATE}: A new branch is not needed"
 		exit 1
@@ -77,14 +77,36 @@ function check-branch () {
 function create-branch () {
 	
 	# Create new branch
-	tmgit checkout -b $(date +'%Y.%m.%d')
+	tmgit checkout -b ${TODAY_DATE}
+}
+
+# Check what is needed to commit or remove
+function check-commit () {
+
+	# Check Removed files
+	if tmgit status | egrep 'deleted'
+	then
+		remove-files
+	fi
+
+	# Check if any file was changed
+	if tmgit status | grep 'working tree clean' > /dev/null 2>&1
+	then
+		echo -e "${COMMIT_DATE}: Working tree is clean, yay : )"
+	else
+		echo -e "${COMMIT_DATE}: Trying to commit changes"
+		if commit-changes
+		then
+			echo -e "${COMMIT_DATE}: Changes commited successfully"
+		else
+			echo -e "${COMMIT_DATE}: Couldn't commit changes this time :/"
+		fi
+	fi
 }
 
 # Remove from repo files which were removed from the disk
 function remove-files () {
 
-	if tmgit status | egrep 'deleted'
-	then
 		# Delete files using tmgit status and tmgit rm
 		tmgit rm --cached -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
 	fi
@@ -93,27 +115,17 @@ function remove-files () {
 
 function commit-changes () {
 
-	export EDITOR=$(which nano)
-	export COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
-
-	# Check if we need to commit
-	if tmgit status | grep 'working tree clean' > /dev/null 2>&1
+	echo -e "Starting commit ${COMMIT_DATE}"
+	# Commit changes to branch
+	if tmgit commit -a -m "$(tmgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
 	then
-		echo -e "${COMMIT_DATE}: Working tree is clean, yay : )"
+		echo "Commit is OK!"
 	else
-		echo -e "Starting commit ${COMMIT_DATE}"
-		# Commit changes to branch
-		if tmgit commit -a -m "$(tmgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
-		then
-			echo "Commit is OK!"
-		else
-			echo "Commit failed, exiting now"
-			exit 1
-		fi
+		echo "Commit failed, exiting now"
+		exit 1
 	fi
 
 }
-
 
 # Check the customized git repository
 function check-repo() {
@@ -180,7 +192,7 @@ function create-repo () {
 
 	# Go to $HOME dir, reset repository (with an * on gitignore, nothing should happen, actually)
     cd $HOME
-    if tmgit reset --hard
+    if git --git-dir $HOME/.dotfiles/.git --work-tree $HOME reset --hard
     then
         echo "tmgit reset OK"
     else
@@ -189,6 +201,6 @@ function create-repo () {
     fi
 
 	# Now print repo status
-	tmgit status
+	git --git-dir $HOME/.dotfiles/.git --work-tree $HOME status
 
 }
