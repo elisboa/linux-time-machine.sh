@@ -4,7 +4,11 @@
 # Date: 2019 - 01 - 04
 
 # Set environment vars and aliases
-function set-env () {
+function set-vars () {
+
+    ## Set aliases
+	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
+	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 
     ## Set vars
 	# Check which branch we are
@@ -18,10 +22,7 @@ function set-env () {
     # Force current language to C, so all git messages are in default english
     LANG="C"
 
-    ## Set aliases
-	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
-	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
- 
+	check-env
 }
 
 # Check all environment requirements
@@ -52,9 +53,7 @@ function check-env () {
 		exit 1
 	fi
 
-	echo -e "All checked, now setting env"
-	set-env
-
+	echo -e "All checked"
 }
 
 function check-branch () {
@@ -109,7 +108,6 @@ function remove-files () {
 
 		# Delete files using tmgit status and tmgit rm
 		tmgit rm --cached -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
-	fi
 
 }
 
@@ -128,7 +126,7 @@ function commit-changes () {
 }
 
 # Check the customized git repository
-function check-repo() {
+function check-repo () {
 	
 	# Check if $HOME/.dotfiles/.git is present
 	if [[ -d $HOME/.dotfiles/.git ]]
@@ -146,7 +144,8 @@ function create-repo () {
 
 	# Try to create git custom dir, exit in case of fail
 	echo -ne "Creating $HOME repository: "
-	if mkdir -pv $HOME/.dotfiles then
+	if mkdir -pv $HOME/.dotfiles
+	then
 		echo OK
 	else
 		echo FAIL
