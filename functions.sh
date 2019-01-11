@@ -114,53 +114,81 @@ function commit-changes () {
 
 }
 
-# Check and create Git repository, if necessary 
-function create-repo () {
-    # Check if $HOME/.dotfiles/.git is present
+
+# Check the customized git repository
+function check-repo() {
+	
+	# Check if $HOME/.dotfiles/.git is present
 	if [[ -d $HOME/.dotfiles/.git ]]
     then
 		echo "Repository already present"
     # If not, create and initialize git repository
 	else
-		echo "Creating $HOME repository"
-		cd $HOME/.dotfiles
-		if command git init .
-        then
-            echo "Git init OK"
-        else
-            echo "Git init FAIL. Exiting now"
-            exit 1
-        fi
-		if command echo "*" > .gitignore
-        then
-            echo "gitignore file created OK"
-        else
-            echo "gitignore couldn't be written, FAIL. Exiting now"
-            exit 1
-        fi
-		if command git add -f .gitignore
-        then
-            echo "Git add OK."
-        else
-            echo "Git add FAIL. Exiting now"
-            exit 1
-        fi
-        if command git commit -m "gitignore added with * entry"
-        then
-            echo "Git commit OK"
-        else
-            echo "Git commit FAIL. Exiting now"
-            exit 1
-        fi
-
-        cd $HOME
-        if tmgit reset --hard
-        then
-            echo "tmgit reset OK"
-        else
-            echo "tmgit reset FAIL. Exiting now"
-            exit 1
-        fi
-		tmgit status
+		echo "Trying to create tmgit repository"
+		create-repo
 	fi
+}
+
+# Check and create Git repository, if necessary 
+function create-repo () {
+
+	# Try to create git custom dir, exit in case of fail
+	echo -ne "Creating $HOME repository: "
+	if mkdir -pv $HOME/.dotfiles then
+		echo OK
+	else
+		echo FAIL
+		exit 1
+	fi
+
+	# Try to initialize the git repository
+	cd $HOME/.dotfiles
+	if command git init .
+    then
+        echo "Git init OK"
+    else
+        echo "Git init FAIL. Exiting now"
+        exit 1
+    fi
+
+	# Try to create a gitignore file
+	if command echo "*" > .gitignore
+    then
+        echo "gitignore file created OK"
+    else
+        echo "gitignore couldn't be written, FAIL. Exiting now"
+        exit 1
+    fi
+
+	# Try to add gitignore file to repository
+	if command git add -f .gitignore
+    then
+        echo "Git add OK."
+    else
+        echo "Git add FAIL. Exiting now"
+        exit 1
+    fi
+
+	# Try to commit the newly added gitignore file
+    if command git commit -m "gitignore added with * entry"
+    then
+        echo "Git commit OK"
+    else
+        echo "Git commit FAIL. Exiting now"
+        exit 1
+    fi
+
+	# Go to $HOME dir, reset repository (with an * on gitignore, nothing should happen, actually)
+    cd $HOME
+    if tmgit reset --hard
+    then
+        echo "tmgit reset OK"
+    else
+        echo "tmgit reset FAIL. Exiting now"
+        exit 1
+    fi
+
+	# Now print repo status
+	tmgit status
+
 }
