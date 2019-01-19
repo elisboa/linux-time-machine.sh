@@ -1,28 +1,32 @@
 # linux-time-machine.sh
 A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
 
-PS1: You should avoid some larger files for now.
+All you have to do is run manually:
+./tmgit.sh
 
-PS2: The add-files function has been disabled, so you have to forcibly add files:
+If you must, you should edit your crontab to add the script, so you can run it automatically:
 ```
-dgit add -f $HOME/my_file
+** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit.sh >> /tmp/tmgit.sh.log 2>&1
 ```
-PS3: may be a folder as well
+
+You must manually (and forcibly) add files or folders to you tmgit repository:
+```
+tmgit add -f $HOME/my_file
+tmgit add -f $HOME/my_folder
+```
+
 If you want to remove:
 ```
-dgit rm -f --cached -r $HOME/my_dir
+tmgit rm -f --cached -r $HOME/my_file
 ```
-It will not remove the dir or file from disk, only from your dgit repository :)
+It will not remove the dir or file from disk, only from your tmgit repository :)
 
+Detailed explanation:
 
-How to use:
+As seen in: 
+https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
+This project aims to automatically version control files in your home directory using an aliased git and a customized workdir to store your git settings. Basically the tmgit repository is built using these commands: 
 
-1. Copy your scripts to a place like ~/.scripts
-2. Put an alias in your .bashrc:
-```
-alias dgit='git --git-dir $HOME/.dotfiles/.git' --work-tree $HOME
-```
-3. as seen in: https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
 ```
 mkdir -pv $HOME/.dotfiles
 cd $HOME/.dotfiles
@@ -30,21 +34,22 @@ git init .
 echo "*" > .gitignore
 git add -f .gitignore
 git commit -m "gitignore"
-echo "alias dgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'" >> $HOME/.bashrc
+alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
 cd ~
-dgit reset --hard
-dgit status
+tmgit reset --hard
+tmgit status
 ```
-4. Create and add a file to test it:
+
+You now have a customized git repository pointing to your $HOME directory. However, as seen above, it ignores ALL files on your home directory, so you don't add anything by accident. You will only version what you explictitly add. 
+
+You can create and add a file to test it:
 ```
-echo "this is a silly test" > $HOME/dgittestfile
-dgit add -f $HOME/dgittestfile
-dgit commit -m "Added $HOME/dgittestfile"
+alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
+echo "this is a silly test" > $HOME/tmgit_test_file
+tmgit add -f $HOME/tmgit_test_file
+tmgit commit -m "Added $HOME/tmgit_test_file"
 ```
-5. With your own user, do a crontab -e and call your scripts. Actually I'm using this
-```
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/dgit-create-branch.sh >> /tmp/dgit-create-branch.sh.log
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/dgit-commit-branch.sh >> /tmp/dgit-commit-branch.sh.log
-```
-6. Monitor log files: tail -f /tmp/dgit*log
-7. Report your bugs or post me a pull-request with bufixes
+
+Monitor log files: tail -f /tmp/tmgit*log
+
+Report your bugs or post me a pull-request with bugfixes
