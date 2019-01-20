@@ -67,7 +67,7 @@ function check-branch () {
 	
 	then
 		echo -e "${COMMIT_DATE}: A new branch is not needed"
-		exit 1
+
 	else
 		echo -e "${COMMIT_DATE}: Creating a new branch"
 		create-branch
