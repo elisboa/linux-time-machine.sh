@@ -21,9 +21,11 @@ function set-vars () {
 
     # Set commit date based on current time
 	COMMIT_DATE="$(date +'%Y.%m.%d-%H.%M')"
+
     # Force current language to C, so all git messages are in default english
     LANG="C"
 
+	# After all set, call check-env function
 	check-env
 }
 
@@ -98,7 +100,7 @@ function check-commit () {
 		echo -e "${COMMIT_DATE}: Trying to commit changes"
 		if commit-changes
 		then
-			echo -e "${COMMIT_DATE}: Changes commited successfully"
+			echo -e "${COMMIT_DATE}: Changes committed successfully"
 		else
 			echo -e "${COMMIT_DATE}: Couldn't commit changes this time :/"
 		fi
@@ -117,11 +119,12 @@ function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
+	cd $HOME
 	if tmgit commit -a -m "$(tmgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
 	then
-		echo "Commit is OK!"
+		echo -ne "Commit is OK!"
 	else
-		echo "Commit failed, exiting now"
+		echo -ne "Commit failed, exiting now"
 		exit 1
 	fi
 
