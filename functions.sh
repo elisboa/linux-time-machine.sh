@@ -8,7 +8,9 @@ function set-vars () {
 
     ## Set aliases
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
-	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc...
+	alias tmgit="git --git-dir \$HOME/.dotfiles/.git --work-tree \$HOME"
 
     ## Set vars
 	# Check which branch we are
@@ -65,7 +67,7 @@ function check-branch () {
 	
 	then
 		echo -e "${COMMIT_DATE}: A new branch is not needed"
-		exit 1
+
 	else
 		echo -e "${COMMIT_DATE}: Creating a new branch"
 		create-branch
@@ -126,7 +128,7 @@ function commit-changes () {
 }
 
 # Check the customized git repository
-function check-repo () {
+function check-tmgit-repo () {
 	
 	# Check if $HOME/.dotfiles/.git is present
 	if [[ -d $HOME/.dotfiles/.git ]]
@@ -135,12 +137,12 @@ function check-repo () {
     # If not, create and initialize git repository
 	else
 		echo "Trying to create tmgit repository"
-		create-repo
+		create-tmgit-repo
 	fi
 }
 
 # Check and create Git repository, if necessary 
-function create-repo () {
+function create-tmgit-repo () {
 
 	# Try to create git custom dir, exit in case of fail
 	echo -ne "Creating $HOME repository: "

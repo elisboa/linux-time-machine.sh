@@ -40,7 +40,7 @@ tmgit reset --hard
 tmgit status
 ```
 
-You now have a customized git repository pointing to your $HOME directory. However, as seen above, it ignores ALL files on your home directory, so you don't add anything by accident. You will only version what you explictitly add. 
+You now have a customized git repository pointing to your $HOME directory. However, as seen above, it ignores ALL files on your home directory, so you don't add anything by accident. You will only version what you explictitly add.
 
 You can create and add a file to test it:
 ```

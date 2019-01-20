@@ -4,10 +4,10 @@
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
 # Date: 2019 - 01 - 11
 
-# Determines the order which all other functions are called
+# Determine the order which all other functions are called
 function main () {
     
-    check-repo
+    check-tmgit-repo
     
     set-vars
     
