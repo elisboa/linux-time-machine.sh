@@ -50,6 +50,9 @@ tmgit add -f $HOME/tmgit_test_file
 tmgit commit -m "Added $HOME/tmgit_test_file"
 ```
 
-Monitor log files: tail -f /tmp/tmgit*log
+Monitor log files: 
+```
+tail -f /tmp/tmgit*log
+```
 
 Report your bugs or post me a pull-request with bugfixes
