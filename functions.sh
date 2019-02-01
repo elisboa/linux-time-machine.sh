@@ -10,7 +10,7 @@ function set-vars () {
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc...
-	alias tmgit="git --git-dir \$HOME/.dotfiles/.git --work-tree \$HOME"
+	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 
     ## Set vars
 	# Check which branch we are
