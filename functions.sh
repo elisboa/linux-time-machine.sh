@@ -120,11 +120,11 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd $HOME
-	if tmgit commit -a -m "$(tmgit status | grep \: ; echo) Automated commit at ${COMMIT_DATE}"
+	if tmgit commit -a -m "$(tmgit status | egrep -v "Changes not staged for commit" | grep \: ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 	then
-		echo -ne "Commit is OK!"
+		echo -e "Commit is OK!"
 	else
-		echo -ne "Commit failed, exiting now"
+		echo -e "Commit failed, exiting now"
 		exit 1
 	fi
 
