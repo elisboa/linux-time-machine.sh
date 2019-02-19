@@ -3,6 +3,20 @@
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
 # Date: 2019 - 01 - 04
 
+# Push to remote, mirroring repository
+function push-remote () {
+
+	set-vars &&\
+	check-env &&\
+	tmgit remote |\
+	while read remote_repo
+	do
+		echo Pushing to ${remote_repo}
+		tmgit push ${remote_repo} --mirror
+	done
+
+}
+
 # Set environment vars and aliases
 function set-vars () {
 

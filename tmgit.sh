@@ -20,5 +20,16 @@ function main () {
 # Source all functions from functions.sh
 source $(dirname ${0})/functions.sh
 
+# Check if parameters were passed
+if [[ "${1}" == "push-remote" ]]
+then
+    echo Pushing to remote
+    $1
+    exit
+fi
+
 # Run main function
 main
+
+
+
