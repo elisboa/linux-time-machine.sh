@@ -6,6 +6,7 @@
 # Push to remote, mirroring repository
 function push-remote () {
 
+	sleep 3
 	set-vars &&\
 	check-env &&\
 	tmgit remote |\
