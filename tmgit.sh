@@ -15,21 +15,24 @@ function main () {
     
     check-commit
 
+    # Check if parameters were passed
+    if [[ "${1}" == "push-remote" ]]
+    then
+        sleep 5 #sleep so it doesnt conflict with another 
+        echo -ne "\nPushing to remote repos: "
+        if push-remote
+        then
+            echo -e "\nAll repos are done"
+        else
+            echo -e "\nProblem pushing to remote repo $remote_repo"
+            exit 1
+        fi
+    fi
+
 }
 
 # Source all functions from functions.sh
 source $(dirname ${0})/functions.sh
 
-# Check if parameters were passed
-if [[ "${1}" == "push-remote" ]]
-then
-    echo Pushing to remote
-    $1
-    exit
-fi
-
 # Run main function
-main
-
-
-
+main $@
