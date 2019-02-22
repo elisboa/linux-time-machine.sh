@@ -123,7 +123,7 @@ function check-commit () {
 function remove-files () {
 
 		# Delete files using tmgit status and tmgit rm
-		tmgit rm --cached -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
+		tmgit rm -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
 
 }
 
