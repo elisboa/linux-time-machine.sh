@@ -6,14 +6,11 @@
 # Push to remote, mirroring repository
 function push-remote () {
 
-	sleep 3
-	set-vars &&\
-	check-env &&\
-	tmgit remote |\
+	tmgit remote 2> /dev/null |\
 	while read remote_repo
 	do
-		echo Pushing to ${remote_repo}
-		tmgit push ${remote_repo} --mirror
+		echo -n "${remote_repo} "
+		tmgit push ${remote_repo} --mirror 2> /dev/null
 	done
 
 }
@@ -135,7 +132,7 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd $HOME
-	if tmgit commit -a -m "$(tmgit status | egrep -v "Changes not staged for commit" | grep \: ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+	if tmgit commit -a -m "$(tmgit status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 	then
 		echo -e "Commit is OK!"
 	else
