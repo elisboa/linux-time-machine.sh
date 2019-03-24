@@ -6,11 +6,14 @@
 # Push to remote, mirroring repository
 function push-remote () {
 
-	tmgit remote 2> /dev/null |\
+	# For each remote repository, do...
+	$TMGIT remote 2> /dev/null |\
 	while read remote_repo
 	do
+		# ... show repo name...
 		echo -n "${remote_repo} "
-		tmgit push ${remote_repo} --mirror 2> /dev/null
+		# ... and push local branches, using mirror
+		$TMGIT push ${remote_repo} --mirror 2> /dev/null
 	done
 
 }
@@ -21,12 +24,14 @@ function set-vars () {
     ## Set aliases
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
-	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc...
-	alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
+	GIT_BIN="$(which git)"
+	GIT_PARAMS=" --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
 	# Check which branch we are
-	CUR_BRANCH="$(tmgit branch | grep \* | cut -d\  -f2 2> /dev/null)"
+	CUR_BRANCH="$($TMGIT branch | grep \* | cut -d\  -f2 2> /dev/null)"
 
 	# Check which day is today
 	TODAY_DATE="$(date +'%Y.%m.%d')"
@@ -61,7 +66,7 @@ function check-env () {
 
 	# Check whether tmgit alias works or not
 	echo -ne "tmgit status is: "
-	if tmgit --version > /dev/null 2>&1
+	if $TMGIT --version > /dev/null 2>&1
 	then
 		echo -e "OK"
 	else
@@ -92,20 +97,20 @@ function check-branch () {
 function create-branch () {
 	
 	# Create new branch
-	tmgit checkout -b ${TODAY_DATE}
+	$TMGIT checkout -b ${TODAY_DATE}
 }
 
 # Check what is needed to commit or remove
 function check-commit () {
 
 	# Check Removed files
-	if tmgit status | egrep 'deleted'
+	if $TMGIT status | egrep 'deleted'
 	then
 		remove-files
 	fi
 
 	# Check if any file was changed
-	if tmgit status | grep 'working tree clean' > /dev/null 2>&1
+	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
 	then
 		echo -e "${COMMIT_DATE}: Working tree is clean, yay : )"
 	else
@@ -123,7 +128,7 @@ function check-commit () {
 function remove-files () {
 
 		# Delete files using tmgit status and tmgit rm
-		tmgit rm -f -r $(tmgit status | egrep 'deleted:' | cut -d\: -f2 | xargs)
+		$TMGIT rm -f -r $($TMGIT status | egrep 'deleted:' | cut -d\: -f2 | xargs)
 
 }
 
@@ -132,7 +137,7 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd $HOME
-	if tmgit commit -a -m "$(tmgit status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+	if $TMGIT commit -a -m "$($TMGIT status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 	then
 		echo -e "Commit is OK!"
 	else
