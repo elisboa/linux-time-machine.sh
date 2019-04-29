@@ -6,7 +6,7 @@
 
 # Determine the order which all other functions are called
 function main () {
-    
+
     check-tmgit-repo
     
     set-vars
