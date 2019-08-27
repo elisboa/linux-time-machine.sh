@@ -8,6 +8,11 @@ All you have to do is run manually:
 ./tmgit.sh
 ```
 
+If you want to use a custom directory, other than your $HOME, run this instead:
+```
+./tmgit.sh my_custom_dir
+```
+
 # Scheduling with cron
 
 If you must, you should edit your crontab to add the script, so you can run it automatically:
