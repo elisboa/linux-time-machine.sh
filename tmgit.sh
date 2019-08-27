@@ -6,6 +6,7 @@
 
 # Determine the order which all other functions are called
 function main () {
+<<<<<<< HEAD
     
 
     if [[ -d "${1}" ]] 
@@ -25,6 +26,16 @@ function main () {
 #    check-branch
 #    
 #    check-commit
+=======
+
+    check-tmgit-repo
+    
+    set-vars
+    
+    check-branch
+    
+    check-commit
+>>>>>>> origin/master
 
     # Check if parameters were passed
     if [[ "${1}" == "push-remote" ]]
