@@ -150,8 +150,16 @@ function commit-changes () {
 # Check the customized git repository
 function check-tmgit-repo () {
 	
-	# Check if $HOME/.dotfiles/.git is present
-	if [[ -d $HOME/.dotfiles/.git ]]
+	if [[ -n "${1}" ]] 
+	then
+		TMGIT_WORK_DIR="${1}"
+	else
+		TMGIT_WORK_DIR="${HOME}"
+	fi
+	
+	
+	# Check if $TMGIT_WORK_DIR/.dotfiles/.git is present
+	if [[ -d "${TMGIT_WORK_DIR}"/.dotfiles/.git ]]
     then
 		echo "Repository already present"
     # If not, create and initialize git repository
@@ -165,8 +173,8 @@ function check-tmgit-repo () {
 function create-tmgit-repo () {
 
 	# Try to create git custom dir, exit in case of fail
-	echo -ne "Creating $HOME repository: "
-	if mkdir -pv $HOME/.dotfiles
+	echo -ne "Creating $TMGIT_WORK_DIR repository: "
+	if mkdir -pv "${TMGIT_WORK_DIR}"/.dotfiles
 	then
 		echo OK
 	else
@@ -175,7 +183,7 @@ function create-tmgit-repo () {
 	fi
 
 	# Try to initialize the git repository
-	cd $HOME/.dotfiles
+	cd "${TMGIT_WORK_DIR}"/.dotfiles
 	if command git init .
     then
         echo "Git init OK"

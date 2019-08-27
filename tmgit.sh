@@ -7,13 +7,24 @@
 # Determine the order which all other functions are called
 function main () {
     
-    check-tmgit-repo
-    
-    set-vars
-    
-    check-branch
-    
-    check-commit
+
+    if [[ -d "${1}" ]] 
+    then
+        echo -ne "${1} is a valid dir, using it as a work dir"
+        export TMGIT_WORK_DIR="${1}"
+    else
+        echo -ne "${1} is not a valid dir"
+        exit 1
+    fi
+
+
+    check-tmgit-repo ${TMGIT_WORK_DIR}
+#    
+#    set-vars
+#    
+#    check-branch
+#    
+#    check-commit
 
     # Check if parameters were passed
     if [[ "${1}" == "push-remote" ]]
