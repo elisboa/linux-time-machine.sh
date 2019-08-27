@@ -4,7 +4,9 @@ A very, very simple and buggy time machine for Linux written in shell script tha
 # Running
 
 All you have to do is run manually:
+```
 ./tmgit.sh
+```
 
 # Scheduling with cron
 
