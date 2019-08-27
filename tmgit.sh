@@ -10,11 +10,11 @@ function main () {
 
     if [[ -d "${1}" ]] 
     then
-        echo -ne "${1} is a valid dir, using it as a work dir"
+        echo -e "${1} is a valid dir, using it as a work dir"
         export TMGIT_WORK_DIR="${1}"
     else
-        echo -ne "${1} is not a valid dir"
-        exit 1
+        echo -e "Using $HOME as TMGIT_WORK_DIR"
+        export TMGIT_WORK_DIR="${HOME}"
     fi
 
 

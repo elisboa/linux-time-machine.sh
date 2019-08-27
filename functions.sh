@@ -26,7 +26,7 @@ function set-vars () {
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(which git)"
-	GIT_PARAMS=" --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
+	GIT_PARAMS=" --git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
@@ -51,7 +51,7 @@ function check-env () {
 	
 	echo -e "Checking if working environment is ok"
 
-	cd $HOME
+	cd "${TMGIT_WORK_DIR}"
 	echo -e "Current directory is $PWD"
 
 	# Check whether git is a valid command
@@ -136,7 +136,7 @@ function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
-	cd $HOME
+	cd "${TMGIT_WORK_DIR}"
 	if $TMGIT commit -a -m "$($TMGIT status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 	then
 		echo -e "Commit is OK!"
@@ -219,9 +219,9 @@ function create-tmgit-repo () {
         exit 1
     fi
 
-	# Go to $HOME dir, reset repository (with an * on gitignore, nothing should happen, actually)
-    cd $HOME
-    if git --git-dir $HOME/.dotfiles/.git --work-tree $HOME reset --hard
+	# Go to $TMGIT_WORK_DIR dir, reset repository (with an * on gitignore, nothing should happen, actually)
+    cd "${TMGIT_WORK_DIR}"
+    if git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" reset --hard
     then
         echo "tmgit reset OK"
     else
@@ -230,6 +230,6 @@ function create-tmgit-repo () {
     fi
 
 	# Now print repo status
-	git --git-dir $HOME/.dotfiles/.git --work-tree $HOME status
+	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" status
 
 }
