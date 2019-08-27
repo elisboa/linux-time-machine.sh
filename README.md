@@ -1,7 +1,7 @@
 # linux-time-machine.sh
 A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
 
-# Running
+## Running
 
 All you have to do is run manually:
 ```
@@ -13,21 +13,21 @@ If you want to use a custom directory, other than your $HOME, run this instead:
 ./tmgit.sh my_custom_dir
 ```
 
-# Scheduling with cron
+## Scheduling with cron
 
 If you must, you should edit your crontab to add the script, so you can run it automatically:
 ```
 ** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit.sh >> /tmp/tmgit.sh.log 2>&1
 ```
 
-# Adding files to your repository 
+## Adding files to your repository 
 
 You must manually (and forcibly) add files or folders to you tmgit repository:
 ```
 tmgit add -f $HOME/my_file
 tmgit add -f $HOME/my_folder
 ```
-# Removing files 
+## Removing files 
 
 If you want to remove:
 ```
@@ -35,7 +35,7 @@ tmgit rm -f --cached -r $HOME/my_file
 ```
 It will not remove the dir or file from disk, only from your tmgit repository :)
 
-# Background story 
+## Background story 
 
 Detailed explanation:
 
@@ -66,13 +66,13 @@ tmgit add -f $HOME/tmgit_test_file
 tmgit commit -m "Added $HOME/tmgit_test_file"
 ```
 
-# Logging 
+## Logging 
 
 Monitor log files: 
 ```
 tail -f /tmp/tmgit*log
 ```
 
-# Contact 
+## Contact 
 
 Report your bugs by creating an issue or post me a pull-request with bugfixes
