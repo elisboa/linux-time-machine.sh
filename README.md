@@ -73,6 +73,10 @@ Monitor log files:
 tail -f /tmp/tmgit*log
 ```
 
-## Contact 
+## Contact
 
-Report your bugs by creating an issue or post me a pull-request with bugfixes
+Report your bugs by creating an issue or post me a pull-request with bugfixes.
+
+## Questions
+
+Do you have more questions? Check our [Wiki](https://github.com/elisboa/linux-time-machine.sh/wiki) out! 
