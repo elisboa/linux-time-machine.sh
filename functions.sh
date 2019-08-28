@@ -26,7 +26,7 @@ function set-vars () {
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(which git)"
-	GIT_PARAMS=" --git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
+	GIT_PARAMS="--author "tmgit automated 'commit-changes' function" --git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
@@ -231,5 +231,5 @@ function create-tmgit-repo () {
 
 	# Now print repo status
 	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" status
-
+git 
 }
