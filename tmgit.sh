@@ -20,11 +20,11 @@ function main () {
 
     check-tmgit-repo ${TMGIT_WORK_DIR}
 #    
-#    set-vars
+    set-vars
 #    
-#    check-branch
+    check-branch
 #    
-#    check-commit
+    check-commit
 
     # Check if parameters were passed
     if [[ "${1}" == "push-remote" ]]
