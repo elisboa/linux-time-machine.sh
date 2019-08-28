@@ -26,7 +26,7 @@ function set-vars () {
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(which git)"
-	GIT_PARAMS="--author "tmgit automated 'commit-changes' function" --git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
+	GIT_PARAMS="--git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
@@ -137,7 +137,11 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd "${TMGIT_WORK_DIR}"
-	if $TMGIT commit -a -m "$($TMGIT status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+	echo ""
+	echo "running ${TMGIT} status"
+	$TMGIT status
+	echo ""
+	if $TMGIT commit --author "tmgit script <tmgit@localhost>" -a -m "$($TMGIT status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 	then
 		echo -e "Commit is OK!"
 	else
