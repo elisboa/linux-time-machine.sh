@@ -137,6 +137,7 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd "${TMGIT_WORK_DIR}"
+	$TMIG add .
 	echo ""
 	echo "running ${TMGIT} status"
 	$TMGIT status
@@ -224,15 +225,15 @@ function create-tmgit-repo () {
     fi
 
 	# Go to $TMGIT_WORK_DIR dir, reset repository (with an * on gitignore, nothing should happen, actually)
-    cd "${TMGIT_WORK_DIR}"
-    if git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" reset --hard
-    then
-        echo "tmgit reset OK"
-    else
-        echo "tmgit reset FAIL. Exiting now"
-        exit 1
-    fi
-
+#    cd "${TMGIT_WORK_DIR}"
+#    if git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" reset --hard
+#    then
+#        echo "tmgit reset OK"
+#    else
+#        echo "tmgit reset FAIL. Exiting now"
+#        exit 1
+#    fi
+#
 	# Now print repo status
 	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" status
 git 
