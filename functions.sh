@@ -136,8 +136,8 @@ function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
-	cd "${TMGIT_WORK_DIR}"
-	$TMIG add .
+	cd ${TMGIT_WORK_DIR}
+	$TMGIT add .
 	echo ""
 	echo "running ${TMGIT} status"
 	$TMGIT status
