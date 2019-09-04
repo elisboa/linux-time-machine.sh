@@ -138,6 +138,8 @@ function commit-changes () {
 	# Commit changes to branch
 	cd ${TMGIT_WORK_DIR}
 	$TMGIT add .
+	#$TMGIT reset -- .dotfiles
+	$TMGIT rm --cached .dotfiles
 	echo ""
 	echo "running ${TMGIT} status"
 	$TMGIT status
