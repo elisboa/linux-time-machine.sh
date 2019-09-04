@@ -216,7 +216,7 @@ function create-tmgit-repo () {
     fi
 
 	# Try to commit the newly added gitignore file
-    if command git commit -m "gitignore added with * entry"
+    if command git commit .gitignore -m "gitignore added with * entry"
     then
         echo "Git commit OK"
     else
