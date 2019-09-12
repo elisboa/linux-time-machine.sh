@@ -21,7 +21,14 @@ function push-remote () {
 # Set environment vars and aliases
 function set-vars () {
 
-    ## Set aliases
+	if [[ -n "${1}" ]] 
+	then
+		TMGIT_WORK_DIR="${1}"
+	else
+		TMGIT_WORK_DIR="${HOME}"
+	fi
+
+  ## Set aliases
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
@@ -163,7 +170,6 @@ function check-tmgit-repo () {
 	else
 		TMGIT_WORK_DIR="${HOME}"
 	fi
-	
 	
 	# Check if $TMGIT_WORK_DIR/.dotfiles/.git is present
 	if [[ -d "${TMGIT_WORK_DIR}"/.dotfiles/.git ]]
