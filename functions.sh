@@ -82,6 +82,10 @@ function check-env () {
 	fi
 
 	echo -e "All checked"
+
+  echo -e "Git being run as:"
+  echo -e "${TMGIT}"
+  echo -e "Consider adding this line to your $HOME/.profile: alias tmgit='${TMGIT}'"
 }
 
 function check-branch () {
@@ -205,14 +209,24 @@ function create-tmgit-repo () {
         exit 1
     fi
 
-	# Try to create a gitignore file
-	if command echo "*" > .gitignore
+#	# Try to create a gitignore file on the dir to be versioned
+#	if command echo "*" > ${TMGIT_WORK_DIR}/.gitignore
+#    then
+#        echo "gitignore file created OK"
+#    else
+#        echo "gitignore couldn't be written, FAIL. Exiting now"
+#        exit 1
+#  fi
+
+
+	# Try to create a gitignore file on the repository
+	if command echo "*" >> .gitignore
     then
         echo "gitignore file created OK"
-    else
+  else
         echo "gitignore couldn't be written, FAIL. Exiting now"
         exit 1
-    fi
+  fi
 
 	# Try to add gitignore file to repository
 	if command git add -f .gitignore
@@ -221,7 +235,7 @@ function create-tmgit-repo () {
     else
         echo "Git add FAIL. Exiting now"
         exit 1
-    fi
+  fi
 
 	# Try to commit the newly added gitignore file
     if command git commit .gitignore -m "gitignore added with * entry"
@@ -230,6 +244,15 @@ function create-tmgit-repo () {
     else
         echo "Git commit FAIL. Exiting now"
         exit 1
+    fi
+
+    # Try to copy our .gitignore file to TMGIT_WORK_DIR root
+    if [[ ! -e "${TMGIT_WORK_DIR}/.gitignore" ]]
+    then
+      cp -uva .gitignore "${TMGIT_WORK_DIR}"
+    else
+      echo "${TMGIT_WORK_DIR}/.gitignore already present, giving up"
+      diff -Nur .gitignore "${TMGIT_WORK_DIR}/.gitignore"
     fi
 
 	# Go to $TMGIT_WORK_DIR dir, reset repository (with an * on gitignore, nothing should happen, actually)
@@ -244,5 +267,4 @@ function create-tmgit-repo () {
 #
 	# Now print repo status
 	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" status
-git 
 }
