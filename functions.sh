@@ -148,7 +148,7 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
 	cd ${TMGIT_WORK_DIR}
-	$TMGIT add .
+	${TMGIT} ls-files | while read file ; do ${TMGIT} add -f ${file} ; done
 	#$TMGIT reset -- .dotfiles
 	$TMGIT rm --cached .dotfiles
 	echo ""
