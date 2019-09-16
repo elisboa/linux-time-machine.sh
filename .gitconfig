@@ -1,9 +1,0 @@
-# This is Git's per-user configuration file.
-[user]
-# Please adapt and uncomment the following lines:
-	name = Eduardo Lisboa
-	email = eduardo.lisboa@gmail.com
-	UseHttpPath = true
-[core]
-	editor = vim
-
