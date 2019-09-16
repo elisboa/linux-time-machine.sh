@@ -6,6 +6,8 @@
 # Push to remote, mirroring repository
 function push-remote () {
 
+	set-vars $1
+	
 	# For each remote repository, do...
 	$TMGIT remote 2> /dev/null |\
 	while read remote_repo
