@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 ### functions.sh
 # This file isn't meant to be run. It's a collection of functions used by other scripts
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
@@ -6,16 +8,16 @@
 # Push to remote, mirroring repository
 function push-remote () {
 
-	set-vars $1
+	set-vars "$1"
 	
 	# For each remote repository, do...
 	$TMGIT remote 2> /dev/null |\
-	while read remote_repo
+	while read -r remote_repo
 	do
 		# ... show repo name...
 		echo -n "${remote_repo} "
 		# ... and push local branches, using mirror
-		$TMGIT push ${remote_repo} --mirror 2> /dev/null
+		$TMGIT push "${remote_repo}" -u 2> /dev/null
 	done
 
 }
@@ -34,13 +36,13 @@ function set-vars () {
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
-	GIT_BIN="$(which git)"
+	GIT_BIN="$(command -v git)"
 	GIT_PARAMS="--git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
 	# Check which branch we are
-	CUR_BRANCH="$($TMGIT branch | grep \* | cut -d\  -f2 2> /dev/null)"
+	CUR_BRANCH="$($TMGIT branch | grep '*' | cut -d\  -f2 2> /dev/null)"
 
 	# Check which day is today
 	TODAY_DATE="$(date +'%Y.%m.%d')"
@@ -60,8 +62,12 @@ function check-env () {
 	
 	echo -e "Checking if working environment is ok"
 
-	cd "${TMGIT_WORK_DIR}"
-	echo -e "Current directory is $PWD"
+	if cd "${TMGIT_WORK_DIR}" ; then
+		echo -e "Current directory is $PWD"
+	else
+		echo -e "Failed to access ${TMGIT_WORK_DIR}"
+		exit 1
+	fi
 
 	# Check whether git is a valid command
 	echo -ne "git status is: "
@@ -110,14 +116,14 @@ function check-branch () {
 function create-branch () {
 	
 	# Create new branch
-	$TMGIT checkout -b ${TODAY_DATE}
+	$TMGIT checkout -b "${TODAY_DATE}"
 }
 
 # Check what is needed to commit or remove
 function check-commit () {
 
 	# Check Removed files
-	if $TMGIT status | egrep 'deleted'
+	if $TMGIT status | grep -E 'deleted'
 	then
 		remove-files
 	fi
@@ -141,7 +147,7 @@ function check-commit () {
 function remove-files () {
 
 		# Delete files using tmgit status and tmgit rm
-		$TMGIT rm -f -r $($TMGIT status | egrep 'deleted:' | cut -d\: -f2 | xargs)
+		$TMGIT rm -f -r "$($TMGIT status | grep -E 'deleted:' | cut -d':' -f2 | xargs)"
 
 }
 
@@ -149,19 +155,23 @@ function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
 	# Commit changes to branch
-	cd ${TMGIT_WORK_DIR}
-	${TMGIT} ls-files | while read file ; do ${TMGIT} add -f ${file} ; done
-	#$TMGIT reset -- .dotfiles
-	$TMGIT rm --cached .dotfiles
-	echo ""
-	echo "running ${TMGIT} status"
-	$TMGIT status
-	echo ""
-	if $TMGIT commit --author "tmgit script <tmgit@localhost>" -a -m "$($TMGIT status | egrep -v "Changes not staged for commit" | grep "ed\: " | cut -d\: -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
-	then
-		echo -e "Commit is OK!"
+	if cd "${TMGIT_WORK_DIR}" ; then
+		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
+		#$TMGIT reset -- .dotfiles
+		$TMGIT rm --cached .dotfiles
+		echo ""
+		echo "running ${TMGIT} status"
+		$TMGIT status
+		echo ""
+		if $TMGIT commit --author "tmgit script <tmgit@localhost>" -a -m "$($TMGIT status | grep -E -v "Changes not staged for commit" | grep 'ed: ' | cut -d':' -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+		then
+			echo -e "Commit is OK!"
+		else
+			echo -e "Commit failed, exiting now"
+			exit 1
+		fi
 	else
-		echo -e "Commit failed, exiting now"
+		echo -e "Failed to access ${TMGIT_WORK_DIR}"
 		exit 1
 	fi
 
@@ -202,14 +212,18 @@ function create-tmgit-repo () {
 	fi
 
 	# Try to initialize the git repository
-	cd "${TMGIT_WORK_DIR}"/.dotfiles
-	if command git init .
-    then
-        echo "Git init OK"
-    else
-        echo "Git init FAIL. Exiting now"
-        exit 1
-    fi
+	if cd "${TMGIT_WORK_DIR}"/.dotfiles ; then
+		if command git init .
+		then
+			echo "Git init OK"
+		else
+			echo "Git init FAIL. Exiting now"
+			exit 1
+		fi
+	else
+		echo -e "Failed to access ${TMGIT_WORK_DIR}"
+		exit 1
+	fi
 
 #	# Try to create a gitignore file on the dir to be versioned
 #	if command echo "*" > ${TMGIT_WORK_DIR}/.gitignore

@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 ### tmgit.sh
 # This is the main script. It imports all functions from an external file and them run them in a determined order 
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
@@ -18,25 +18,25 @@ function main () {
 
     shift 
 
-	for argument in $@
+	for argument in "${@}"
     do
 	    # Check if parameters were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 ""	        echo -ne "\nPushing to remote repos: "
-	        if push-remote $TMGIT_WORK_DIR
+	        if push-remote "${TMGIT_WORK_DIR}"
 	        then
 	            echo -e "\nAll repos are done"
 	        else
-	            echo -e "\nProblem pushing to remote repo $remote_repo"
+	            echo -e "\nProblem pushing to remote repo ${TMGIT_WORK_DIR}"
 	            exit 1
 	        fi
 	    fi
     done
 
-    check-tmgit-repo ${TMGIT_WORK_DIR}
+    check-tmgit-repo "${TMGIT_WORK_DIR}"
     
-    set-vars ${TMGIT_WORK_DIR}
+    set-vars "${TMGIT_WORK_DIR}"
     
     check-branch
     
@@ -45,7 +45,8 @@ function main () {
 }
 
 # Source all functions from functions.sh
-source $(dirname ${0})/functions.sh
+# shellcheck source=/dev/null
+source "$(dirname ${0})/functions.sh"
 
 # Run main function
-main $@
+main "$@"
