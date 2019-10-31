@@ -17,14 +17,10 @@ function push-remote () {
 		# ... show repo name...
 		echo -n "${remote_repo} "
 		# ... and push local branches, using mirror
-<<<<<<< HEAD
 		#$TMGIT push ${remote_repo} --mirror 2> /dev/null
 		#... and push local branches, using update
 		$TMGIT push -u --set-upstream origin ${CUR_BRANCH}
 		#$TMGIT push ${remote_repo} -u --follow-tags 2> /dev/null
-=======
-		$TMGIT push "${remote_repo}" -u 2> /dev/null
->>>>>>> 3618a0171eec16c38e604d7708631b39d9dc6079
 	done
 
 }
