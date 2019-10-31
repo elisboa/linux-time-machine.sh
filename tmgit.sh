@@ -23,13 +23,8 @@ function main () {
 	    # Check if parameters were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
-<<<<<<< HEAD
 	        echo -ne "\nPushing to remote repos: "
 	        if push-remote $TMGIT_WORK_DIR
-=======
-""	        echo -ne "\nPushing to remote repos: "
-	        if push-remote "${TMGIT_WORK_DIR}"
->>>>>>> 3618a0171eec16c38e604d7708631b39d9dc6079
 	        then
 	            echo -e "\nAll repos are done"
 	        else
