@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 ### tmgit.sh
 # This is the main script. It imports all functions from an external file and them run them in a determined order 
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
@@ -23,7 +23,7 @@ function main () {
 	    # Check if parameters were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
-""	        echo -ne "\nPushing to remote repos: "
+	        echo -ne "\nPushing to remote repos: "
 	        if push-remote $TMGIT_WORK_DIR
 	        then
 	            echo -e "\nAll repos are done"
