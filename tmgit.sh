@@ -18,25 +18,30 @@ function main () {
 
     shift 
 
-	for argument in $@
+	for argument in "${@}"
     do
 	    # Check if parameters were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
+<<<<<<< HEAD
 	        echo -ne "\nPushing to remote repos: "
 	        if push-remote $TMGIT_WORK_DIR
+=======
+""	        echo -ne "\nPushing to remote repos: "
+	        if push-remote "${TMGIT_WORK_DIR}"
+>>>>>>> 3618a0171eec16c38e604d7708631b39d9dc6079
 	        then
 	            echo -e "\nAll repos are done"
 	        else
-	            echo -e "\nProblem pushing to remote repo $remote_repo"
+	            echo -e "\nProblem pushing to remote repo ${TMGIT_WORK_DIR}"
 	            exit 1
 	        fi
 	    fi
     done
 
-    check-tmgit-repo ${TMGIT_WORK_DIR}
+    check-tmgit-repo "${TMGIT_WORK_DIR}"
     
-    set-vars ${TMGIT_WORK_DIR}
+    set-vars "${TMGIT_WORK_DIR}"
     
     check-branch
     
@@ -45,7 +50,8 @@ function main () {
 }
 
 # Source all functions from functions.sh
-source $(dirname ${0})/functions.sh
+# shellcheck source=/dev/null
+source "$(dirname ${0})/functions.sh"
 
 # Run main function
-main $@
+main "$@"
