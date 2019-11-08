@@ -228,14 +228,14 @@ function create-tmgit-repo () {
 		exit 1
 	fi
 
-#	# Try to create a gitignore file on the dir to be versioned
-#	if command echo "*" > ${TMGIT_WORK_DIR}/.gitignore
-#    then
-#        echo "gitignore file created OK"
-#    else
-#        echo "gitignore couldn't be written, FAIL. Exiting now"
-#        exit 1
-#  fi
+	# Try to create a gitignore file on the dir to be versioned
+	if command echo "*" > ${TMGIT_WORK_DIR}/.gitignore
+    then
+        echo "gitignore file created OK"
+    else
+        echo "gitignore couldn't be written, FAIL. Exiting now"
+        exit 1
+  fi
 
 
 	# Try to create a gitignore file on the repository
