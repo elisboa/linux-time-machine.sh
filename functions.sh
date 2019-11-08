@@ -238,41 +238,52 @@ function create-tmgit-repo () {
 #  fi
 
 
-	# Try to create a gitignore file on the repository
-	if command echo "*" >> .gitignore
-    then
-        echo "gitignore file created OK"
-  else
-        echo "gitignore couldn't be written, FAIL. Exiting now"
-        exit 1
-  fi
+# Try to create a gitignore file on the repository
+if command echo "*" > .gitignore
+   then
+       echo "gitignore file created OK"
+ else
+       echo "gitignore couldn't be written, FAIL. Exiting now"
+       exit 1
+ fi
 
-	# Try to add gitignore file to repository
-	if command git add -f .gitignore
-    then
-        echo "Git add OK."
-    else
-        echo "Git add FAIL. Exiting now"
-        exit 1
-  fi
+# Try to add gitignore file to repository
+if command git add -f .gitignore
+   then
+       echo "Git add OK."
+   else
+       echo "Git add FAIL. Exiting now"
+       exit 1
+ fi
 
-	# Try to commit the newly added gitignore file
-    if command git commit .gitignore -m "gitignore added with * entry"
-    then
-        echo "Git commit OK"
-    else
-        echo "Git commit FAIL. Exiting now"
-        exit 1
-    fi
+# Try to commit the newly added gitignore file
+if command git commit .gitignore -m "gitignore added with * entry"
+	then
+    echo "Git commit OK"
+	else
+    echo "Git commit FAIL. Exiting now"
+    exit 1
+fi
 
-    # Try to copy our .gitignore file to TMGIT_WORK_DIR root
-    if [[ ! -e "${TMGIT_WORK_DIR}/.gitignore" ]]
-    then
-      cp -uva .gitignore "${TMGIT_WORK_DIR}"
-    else
-      echo "${TMGIT_WORK_DIR}/.gitignore already present, giving up"
-      diff -Nur .gitignore "${TMGIT_WORK_DIR}/.gitignore"
-    fi
+### From now on, git must use custom parameters to refer to our versioned directory
+
+	if cd "${TMGIT_WORK_DIR}" ; then
+		echo "Successfully changed to dir ${TMGIT_WORK_DIR}"
+	else
+		echo "Failed to change to dir ${TMGIT_WORK_DIR}. Exitting now"
+		exit 1
+	fi
+
+   # Try to copy our .gitignore file to TMGIT_WORK_DIR root
+   if [[ ! -e "${TMGIT_WORK_DIR}/.gitignore" ]]
+   then
+     cp -uva "${TMGIT_WORK_DIR}"/.dotfiles/.gitignore "${TMGIT_WORK_DIR}"
+   else
+     echo "${TMGIT_WORK_DIR}/.gitignore already present"
+     diff -Nur .gitignore "${TMGIT_WORK_DIR}/.gitignore"
+   fi
+
+#	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" add -f "${TMGIT_WORK_DIR}/.gitignore"
 
 	# Go to $TMGIT_WORK_DIR dir, reset repository (with an * on gitignore, nothing should happen, actually)
 #    cd "${TMGIT_WORK_DIR}"
