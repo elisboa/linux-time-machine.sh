@@ -13,6 +13,13 @@ If you want to use a custom directory, other than your $HOME, run this instead:
 ./tmgit.sh my_custom_dir
 ```
 
+You can use an argument to version all the files of a given dir. To do so, just run like this:
+```
+./tmgit.sh my_custom_dir version-all
+```
+
+PS: the custom dir MUST BE the first argument. By default it uses your $HOME dir, if no custom_dir is specified.
+
 ## Scheduling with cron
 
 If you must, you should edit your crontab to add the script, so you can run it automatically:
@@ -24,14 +31,14 @@ If you must, you should edit your crontab to add the script, so you can run it a
 
 You must manually (and forcibly) add files or folders to you tmgit repository:
 ```
-tmgit add -f $HOME/my_file
-tmgit add -f $HOME/my_folder
+tmgit add -f my_file
+tmgit add -f my_folder
 ```
 ## Removing files 
 
 If you want to remove:
 ```
-tmgit rm -f --cached -r $HOME/my_file
+tmgit rm -f --cached -r my_file
 ```
 It will not remove the dir or file from disk, only from your tmgit repository :)
 
