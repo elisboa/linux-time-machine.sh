@@ -24,7 +24,7 @@ function main () {
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 	        echo -ne "\nPushing to remote repos: "
-	        if push-remote $TMGIT_WORK_DIR
+	        if push-remote "${TMGIT_WORK_DIR}"
 	        then
 	            echo -e "\nAll repos are done"
 	        else
@@ -53,7 +53,7 @@ function main () {
 
 # Source all functions from functions.sh
 # shellcheck source=/dev/null
-source "$(dirname ${0})/functions.sh"
+source "$(dirname "${0}")"/functions.sh
 
 # Run main function
 main "$@"
