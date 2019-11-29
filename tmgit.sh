@@ -16,7 +16,7 @@ function main () {
         export TMGIT_WORK_DIR="${HOME}"
     fi
 
-    shift 
+    shift
 
 	for argument in "${@}"
     do
@@ -24,7 +24,7 @@ function main () {
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 	        echo -ne "\nPushing to remote repos: "
-	        if push-remote $TMGIT_WORK_DIR
+	        if push-remote "${TMGIT_WORK_DIR}"
 	        then
 	            echo -e "\nAll repos are done"
 	        else
@@ -32,6 +32,14 @@ function main () {
 	            exit 1
 	        fi
 	    fi
+
+        # Check if 'version-all' parameter was passed
+        if [[ ${argument} == "version-all" ]]
+	    then
+            echo -e "Versioning all files"
+            export VERSION_ALL="True"
+	    fi
+
     done
 
     check-tmgit-repo "${TMGIT_WORK_DIR}"
@@ -40,13 +48,13 @@ function main () {
     
     check-branch
     
-    check-commit
+    check-commit "${VERSION_ALL}"
 
 }
 
 # Source all functions from functions.sh
 # shellcheck source=/dev/null
-source "$(dirname ${0})/functions.sh"
+source "$(dirname "${0}")"/functions.sh
 
 # Run main function
 main "$@"

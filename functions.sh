@@ -19,7 +19,7 @@ function push-remote () {
 		# ... and push local branches, using mirror
 		#$TMGIT push ${remote_repo} --mirror 2> /dev/null
 		#... and push local branches, using update
-		$TMGIT push -u --set-upstream origin ${CUR_BRANCH}
+		$TMGIT push -u --set-upstream origin "${CUR_BRANCH}"
 		#$TMGIT push ${remote_repo} -u --follow-tags 2> /dev/null
 	done
 
@@ -131,6 +131,19 @@ function check-commit () {
 		remove-files
 	fi
 
+	# Check version-all argument
+	if [[ "${1}" == "True" ]]
+	then
+		echo -ne "Adding all files in ${TMGIT_WORK_DIR}: "
+		if $TMGIT add -f * > /dev/null 2>&1
+		then
+			echo "SUCCESS"
+		else
+			echo "FAILURE"
+			exit 1
+		fi
+	fi
+
 	# Check if any file was changed
 	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
 	then
@@ -157,6 +170,7 @@ function remove-files () {
 function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
+
 	# Commit changes to branch
 	if cd "${TMGIT_WORK_DIR}" ; then
 		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
