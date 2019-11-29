@@ -16,7 +16,7 @@ function main () {
         export TMGIT_WORK_DIR="${HOME}"
     fi
 
-    shift 
+    shift
 
 	for argument in "${@}"
     do
@@ -36,6 +36,7 @@ function main () {
         # Check if 'version-all' parameter was passed
         if [[ ${argument} == "version-all" ]]
 	    then
+            echo -e "Versioning all files"
             export VERSION_ALL="True"
 	    fi
 
