@@ -31,6 +31,7 @@ function main () {
 	            echo -e "\nProblem pushing to remote repo ${TMGIT_WORK_DIR}"
 	            exit 1
 	        fi
+        exit
 	    fi
 
         # Check if 'version-all' parameter was passed
