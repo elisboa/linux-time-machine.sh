@@ -157,6 +157,12 @@ function remove-files () {
 function commit-changes () {
 
 	echo -e "Starting commit ${COMMIT_DATE}"
+
+	if [[ "${1}" == "True" ]]
+	then
+		git add -f *
+	fi
+
 	# Commit changes to branch
 	if cd "${TMGIT_WORK_DIR}" ; then
 		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
