@@ -32,6 +32,13 @@ function main () {
 	            exit 1
 	        fi
 	    fi
+
+        # Check if 'version-all' parameter was passed
+        if [[ ${argument} == "version-all" ]]
+	    then
+            export VERSION_ALL="True"
+	    fi
+
     done
 
     check-tmgit-repo "${TMGIT_WORK_DIR}"
@@ -40,7 +47,7 @@ function main () {
     
     check-branch
     
-    check-commit
+    check-commit "${VERSION_ALL}"
 
 }
 
