@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# shellcheck disable=SC2063
+# shellcheck disable=SC2035
+
 ### functions.sh
 # This file isn't meant to be run. It's a collection of functions used by other scripts
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
