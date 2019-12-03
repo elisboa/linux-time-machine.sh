@@ -178,7 +178,7 @@ function commit-changes () {
 	if cd "${TMGIT_WORK_DIR}" ; then
 		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
 		#$TMGIT reset -- .dotfiles
-		$TMGIT rm --cached .tmgit
+		#$TMGIT rm --cached .tmgit > /dev/null 2>&1 
 		echo ""
 		echo "running ${TMGIT} status"
 		$TMGIT status
