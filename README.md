@@ -27,14 +27,14 @@ If you must, you should edit your crontab to add the script, so you can run it a
 ** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit.sh >> /tmp/tmgit.sh.log 2>&1
 ```
 
-## Adding files to your repository 
+## Adding files to your repository
 
 You must manually (and forcibly) add files or folders to you tmgit repository:
 ```
 tmgit add -f my_file
 tmgit add -f my_folder
 ```
-## Removing files 
+## Removing files
 
 If you want to remove:
 ```
@@ -42,7 +42,7 @@ tmgit rm -f --cached -r my_file
 ```
 It will not remove the dir or file from disk, only from your tmgit repository :)
 
-## Background story 
+## Background story
 
 Detailed explanation:
 
@@ -73,9 +73,9 @@ tmgit add -f $HOME/tmgit_test_file
 tmgit commit -m "Added $HOME/tmgit_test_file"
 ```
 
-## Logging 
+## Logging
 
-Monitor log files: 
+Monitor log files:
 ```
 tail -f /tmp/tmgit*log
 ```
