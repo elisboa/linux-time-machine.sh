@@ -51,13 +51,13 @@ https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-deta
 This project aims to automatically version control files in your home directory using an aliased git and a customized workdir to store your git settings. Basically the tmgit repository is built using these commands: 
 
 ```
-mkdir -pv $HOME/.dotfiles
-cd $HOME/.dotfiles
+mkdir -pv $HOME/.tmgit
+cd $HOME/.tmgit
 git init .
 echo "*" > .gitignore
 git add -f .gitignore
 git commit -m "gitignore"
-alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
+alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 cd ~
 tmgit reset --hard
 tmgit status
@@ -67,7 +67,7 @@ You now have a customized git repository pointing to your $HOME directory. Howev
 
 You can create and add a file to test it:
 ```
-alias tmgit='git --git-dir $HOME/.dotfiles/.git --work-tree=\$HOME'
+alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 echo "this is a silly test" > $HOME/tmgit_test_file
 tmgit add -f $HOME/tmgit_test_file
 tmgit commit -m "Added $HOME/tmgit_test_file"
