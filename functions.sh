@@ -43,7 +43,7 @@ function set-vars () {
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(command -v git)"
-	GIT_PARAMS="--git-dir ${TMGIT_WORK_DIR}/.dotfiles/.git --work-tree ${TMGIT_WORK_DIR}"
+	GIT_PARAMS="--git-dir ${TMGIT_WORK_DIR}/.tmgit/.git --work-tree ${TMGIT_WORK_DIR}"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
@@ -178,7 +178,7 @@ function commit-changes () {
 	if cd "${TMGIT_WORK_DIR}" ; then
 		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
 		#$TMGIT reset -- .dotfiles
-		$TMGIT rm --cached .dotfiles
+		$TMGIT rm --cached .tmgit
 		echo ""
 		echo "running ${TMGIT} status"
 		$TMGIT status
@@ -207,8 +207,8 @@ function check-tmgit-repo () {
 		TMGIT_WORK_DIR="${HOME}"
 	fi
 	
-	# Check if $TMGIT_WORK_DIR/.dotfiles/.git is present
-	if [[ -d "${TMGIT_WORK_DIR}"/.dotfiles/.git ]]
+	# Check if $TMGIT_WORK_DIR/.tmgit/.git is present
+	if [[ -d "${TMGIT_WORK_DIR}"/.tmgit/.git ]]
     then
 		echo "Repository already present"
     # If not, create and initialize git repository
@@ -223,7 +223,7 @@ function create-tmgit-repo () {
 
 	# Try to create git custom dir, exit in case of fail
 	echo -ne "Creating $TMGIT_WORK_DIR repository: "
-	if mkdir -pv "${TMGIT_WORK_DIR}"/.dotfiles
+	if mkdir -pv "${TMGIT_WORK_DIR}"/.tmgit
 	then
 		echo OK
 	else
@@ -232,7 +232,7 @@ function create-tmgit-repo () {
 	fi
 
 	# Try to initialize the git repository
-	if cd "${TMGIT_WORK_DIR}"/.dotfiles ; then
+	if cd "${TMGIT_WORK_DIR}"/.tmgit ; then
 		if command git init .
 		then
 			echo "Git init OK"
@@ -294,7 +294,7 @@ fi
    # Try to copy our .gitignore file to TMGIT_WORK_DIR root
    if [[ ! -e "${TMGIT_WORK_DIR}/.gitignore" ]]
    then
-     cp -uva "${TMGIT_WORK_DIR}"/.dotfiles/.gitignore "${TMGIT_WORK_DIR}"
+     cp -uva "${TMGIT_WORK_DIR}"/.tmgit/.gitignore "${TMGIT_WORK_DIR}"
    else
      echo "${TMGIT_WORK_DIR}/.gitignore already present"
      diff -Nur .gitignore "${TMGIT_WORK_DIR}/.gitignore"
@@ -313,5 +313,5 @@ fi
 #    fi
 #
 	# Now print repo status
-	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" status
+	git --git-dir "${TMGIT_WORK_DIR}"/.tmgit/.git --work-tree "${TMGIT_WORK_DIR}" status
 }
