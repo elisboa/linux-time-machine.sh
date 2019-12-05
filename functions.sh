@@ -31,6 +31,12 @@ function push-remote () {
 # Set environment vars and aliases
 function set-vars () {
 
+	export GIT_AUTHOR_NAME="Tmgit Script"
+	export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
+	
+	export GIT_AUTHOR_EMAIL="tmgit@localhost"
+	export GIT_COMMITTER_EMAIL="${GIT_AUTHOR_EMAIL}"
+
 	if [[ -n "${1}" ]] 
 	then
 		GIT_WORK_TREE="${1}"
@@ -197,7 +203,7 @@ function commit-changes () {
 		echo "running ${TMGIT} status"
 		$TMGIT status
 		echo ""
-		if $TMGIT commit --author "tmgit script <tmgit@localhost>" -a -m "$($TMGIT status | grep -E -v "Changes not staged for commit" | grep 'ed: ' | cut -d':' -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+		if $TMGIT commit -a -m "$($TMGIT status | grep -E -v "Changes not staged for commit" | grep 'ed: ' | cut -d':' -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 		then
 			echo -e "Commit is OK!"
 		else
