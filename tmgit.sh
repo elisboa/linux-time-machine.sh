@@ -11,10 +11,10 @@ function main () {
     if [[ -d "${1}" ]] 
     then
         echo -e "${1} is a valid dir, using it as a work dir"
-        export TMGIT_WORK_DIR="${1}"
+        export GIT_WORK_TREE="${1}"
     else
-        echo -e "Using $HOME as TMGIT_WORK_DIR"
-        export TMGIT_WORK_DIR="${HOME}"
+        echo -e "Using $HOME as GIT_WORK_TREE"
+        export GIT_WORK_TREE="${HOME}"
     fi
 
     shift
@@ -25,11 +25,11 @@ function main () {
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 	        echo -ne "\nPushing to remote repos: "
-	        if push-remote "${TMGIT_WORK_DIR}"
+	        if push-remote "${GIT_WORK_TREE}"
 	        then
 	            echo -e "\nAll repos are done"
 	        else
-	            echo -e "\nProblem pushing to remote repo ${TMGIT_WORK_DIR}"
+	            echo -e "\nProblem pushing to remote repo ${GIT_WORK_TREE}"
 	            exit 1
 	        fi
 	    fi
@@ -43,9 +43,9 @@ function main () {
 
     done
 
-    check-tmgit-repo "${TMGIT_WORK_DIR}"
+    check-tmgit-repo "${GIT_WORK_TREE}"
     
-    set-vars "${TMGIT_WORK_DIR}"
+    set-vars "${GIT_WORK_TREE}"
     
     check-branch
     

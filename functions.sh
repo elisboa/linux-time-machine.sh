@@ -33,17 +33,22 @@ function set-vars () {
 
 	if [[ -n "${1}" ]] 
 	then
-		TMGIT_WORK_DIR="${1}"
+		GIT_WORK_TREE="${1}"
 	else
-		TMGIT_WORK_DIR="${HOME}"
+		GIT_WORK_TREE="${HOME}"
 	fi
+
+	export GIT_WORK_TREE
+	export GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
 
   ## Set aliases
 	# Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
 	#alias tmgit="git --git-dir $HOME/.dotfiles/.git --work-tree $HOME"
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(command -v git)"
-	GIT_PARAMS="--git-dir ${TMGIT_WORK_DIR}/.tmgit/.git --work-tree ${TMGIT_WORK_DIR}"
+	
+	# Here we can set some parameter for our git
+	GIT_PARAMS="--no-pager"
 	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
 
     ## Set vars
@@ -68,15 +73,15 @@ function check-env () {
 	
 	echo -e "Checking if working environment is ok"
 
-	if cd "${TMGIT_WORK_DIR}" ; then
-		echo -e "Current directory is $PWD"
+	if cd "${GIT_WORK_TREE}" ; then
+		echo -e "Current directory is: $PWD"
 	else
-		echo -e "Failed to access ${TMGIT_WORK_DIR}"
+		echo -e "Failed to access ${GIT_WORK_TREE}"
 		exit 1
 	fi
 
 	# Check whether git is a valid command
-	echo -ne "git status is: "
+	echo -n "git command status is: "
 	if command git --version > /dev/null 2>&1
 	then
 		echo -e "OK"
@@ -86,7 +91,7 @@ function check-env () {
 	fi
 
 	# Check whether tmgit alias works or not
-	echo -ne "tmgit status is: "
+	echo -n "tmgit status is: "
 	if $TMGIT --version > /dev/null 2>&1
 	then
 		echo -e "OK"
@@ -95,25 +100,34 @@ function check-env () {
 		exit 1
 	fi
 
-	echo -e "All checked"
+	echo -e "All checked!"
 
-  echo -e "Git being run as:"
+	echo -e ""
+
+  echo -n "Git being run as: "
   echo -e "${TMGIT}"
-  echo -e "Consider adding this line to your $HOME/.profile: alias tmgit='${TMGIT}'"
+  echo -e "\nConsider adding these lines to your $HOME/.profile: "
+	cat <<EoF
+
+export GIT_WORK_TREE="${GIT_WORK_TREE}"
+export GIT_DIR="${GIT_DIR}"
+alias tmgit="${TMGIT}"
+
+EoF
 }
 
 function check-branch () {
 
-	echo -e "Current branch is: ${CUR_BRANCH}"
+	echo -n "Current branch is: ${CUR_BRANCH} "
 
 	# Check whether we need a new branch or not
 	if [[ "${CUR_BRANCH}" == "${TODAY_DATE}" ]]
 	
 	then
-		echo -e "${COMMIT_DATE}: A new branch is not needed"
+		echo -e "-- already on today's current branch"
 
 	else
-		echo -e "${COMMIT_DATE}: Creating a new branch"
+		echo -e "-- creating a new branch: ${COMMIT_DATE}"
 		create-branch
 	fi	
 }
@@ -137,7 +151,7 @@ function check-commit () {
 	# Check version-all argument
 	if [[ "${1}" == "True" ]]
 	then
-		echo -ne "Adding all files in ${TMGIT_WORK_DIR}: "
+		echo -ne "Adding all files in ${GIT_WORK_TREE}: "
 		if $TMGIT add -f * > /dev/null 2>&1
 		then
 			echo "SUCCESS"
@@ -150,14 +164,14 @@ function check-commit () {
 	# Check if any file was changed
 	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
 	then
-		echo -e "${COMMIT_DATE}: Working tree is clean, yay : )"
+		echo -e "Working tree is clean, yay : )"
 	else
-		echo -e "${COMMIT_DATE}: Trying to commit changes"
+		echo -e "Trying to commit changes"
 		if commit-changes
 		then
-			echo -e "${COMMIT_DATE}: Changes committed successfully"
+			echo -e "Changes committed successfully"
 		else
-			echo -e "${COMMIT_DATE}: Couldn't commit changes this time :/"
+			echo -e "Couldn't commit changes this time :/"
 		fi
 	fi
 }
@@ -175,7 +189,7 @@ function commit-changes () {
 	echo -e "Starting commit ${COMMIT_DATE}"
 
 	# Commit changes to branch
-	if cd "${TMGIT_WORK_DIR}" ; then
+	if cd "${GIT_WORK_TREE}" ; then
 		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
 		#$TMGIT reset -- .dotfiles
 		#$TMGIT rm --cached .tmgit > /dev/null 2>&1 
@@ -191,7 +205,7 @@ function commit-changes () {
 			exit 1
 		fi
 	else
-		echo -e "Failed to access ${TMGIT_WORK_DIR}"
+		echo -e "Failed to access ${GIT_WORK_TREE}"
 		exit 1
 	fi
 
@@ -202,13 +216,13 @@ function check-tmgit-repo () {
 	
 	if [[ -n "${1}" ]] 
 	then
-		TMGIT_WORK_DIR="${1}"
+		GIT_WORK_TREE="${1}"
 	else
-		TMGIT_WORK_DIR="${HOME}"
+		GIT_WORK_TREE="${HOME}"
 	fi
 	
-	# Check if $TMGIT_WORK_DIR/.tmgit/.git is present
-	if [[ -d "${TMGIT_WORK_DIR}"/.tmgit/.git ]]
+	# Check if $GIT_WORK_TREE/.tmgit/.git is present
+	if [[ -d "${GIT_WORK_TREE}"/.tmgit/.git ]]
     then
 		echo "Repository already present"
     # If not, create and initialize git repository
@@ -222,8 +236,8 @@ function check-tmgit-repo () {
 function create-tmgit-repo () {
 
 	# Try to create git custom dir, exit in case of fail
-	echo -ne "Creating $TMGIT_WORK_DIR repository: "
-	if mkdir -pv "${TMGIT_WORK_DIR}"/.tmgit
+	echo -ne "Creating $GIT_WORK_TREE repository: "
+	if mkdir -pv "${GIT_WORK_TREE}"/.tmgit
 	then
 		echo OK
 	else
@@ -232,7 +246,7 @@ function create-tmgit-repo () {
 	fi
 
 	# Try to initialize the git repository
-	if cd "${TMGIT_WORK_DIR}"/.tmgit ; then
+	if cd "${GIT_WORK_TREE}"/.tmgit ; then
 		if command git init .
 		then
 			echo "Git init OK"
@@ -241,12 +255,12 @@ function create-tmgit-repo () {
 			exit 1
 		fi
 	else
-		echo -e "Failed to access ${TMGIT_WORK_DIR}"
+		echo -e "Failed to access ${GIT_WORK_TREE}"
 		exit 1
 	fi
 
 #	# Try to create a gitignore file on the dir to be versioned
-#	if command echo "*" > ${TMGIT_WORK_DIR}/.gitignore
+#	if command echo "*" > ${GIT_WORK_TREE}/.gitignore
 #    then
 #        echo "gitignore file created OK"
 #    else
@@ -265,13 +279,15 @@ if command echo "*" > .gitignore
  fi
 
 # Try to add gitignore file to repository
-if command git add -f .gitignore
-   then
-       echo "Git add OK."
-   else
-       echo "Git add FAIL. Exiting now"
-       exit 1
- fi
+# Lines below were commented out because
+# I don't think we actually need to version our .gitignore file
+#if command git add -f .gitignore
+#   then
+#       echo "Git add OK."
+#   else
+#       echo "Git add FAIL. Exiting now"
+#       exit 1
+# fi
 
 # Try to commit the newly added gitignore file
 if command git commit .gitignore -m "gitignore added with * entry"
@@ -284,27 +300,27 @@ fi
 
 ### From now on, git must use custom parameters to refer to our versioned directory
 
-	if cd "${TMGIT_WORK_DIR}" ; then
-		echo "Successfully changed to dir ${TMGIT_WORK_DIR}"
+	if cd "${GIT_WORK_TREE}" ; then
+		echo "Successfully changed to dir ${GIT_WORK_TREE}"
 	else
-		echo "Failed to change to dir ${TMGIT_WORK_DIR}. Exitting now"
+		echo "Failed to change to dir ${GIT_WORK_TREE}. Exitting now"
 		exit 1
 	fi
 
-   # Try to copy our .gitignore file to TMGIT_WORK_DIR root
-   if [[ ! -e "${TMGIT_WORK_DIR}/.gitignore" ]]
+   # Try to copy our .gitignore file to GIT_WORK_TREE root
+   if [[ ! -e "${GIT_WORK_TREE}/.gitignore" ]]
    then
-     cp -uva "${TMGIT_WORK_DIR}"/.tmgit/.gitignore "${TMGIT_WORK_DIR}"
+     cp -uva "${GIT_WORK_TREE}"/.tmgit/.gitignore "${GIT_WORK_TREE}"
    else
-     echo "${TMGIT_WORK_DIR}/.gitignore already present"
-     diff -Nur .gitignore "${TMGIT_WORK_DIR}/.gitignore"
+     echo "${GIT_WORK_TREE}/.gitignore already present"
+     diff -Nur .gitignore "${GIT_WORK_TREE}/.gitignore"
    fi
 
-#	git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" add -f "${TMGIT_WORK_DIR}/.gitignore"
+#	git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" add -f "${GIT_WORK_TREE}/.gitignore"
 
-	# Go to $TMGIT_WORK_DIR dir, reset repository (with an * on gitignore, nothing should happen, actually)
-#    cd "${TMGIT_WORK_DIR}"
-#    if git --git-dir "${TMGIT_WORK_DIR}"/.dotfiles/.git --work-tree "${TMGIT_WORK_DIR}" reset --hard
+	# Go to $GIT_WORK_TREE dir, reset repository (with an * on gitignore, nothing should happen, actually)
+#    cd "${GIT_WORK_TREE}"
+#    if git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" reset --hard
 #    then
 #        echo "tmgit reset OK"
 #    else
@@ -313,5 +329,5 @@ fi
 #    fi
 #
 	# Now print repo status
-	git --git-dir "${TMGIT_WORK_DIR}"/.tmgit/.git --work-tree "${TMGIT_WORK_DIR}" status
+	git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
 }
