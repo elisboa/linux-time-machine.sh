@@ -203,7 +203,7 @@ function commit-changes () {
 		echo "running ${TMGIT} status"
 		$TMGIT status
 		echo ""
-		if $TMGIT commit -a -m "$($TMGIT status | grep -E -v "Changes not staged for commit" | grep 'ed: ' | cut -d':' -f2- | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+		if $TMGIT commit -a -m "$($TMGIT diff HEAD --name-only | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
 		then
 			echo -e "Commit is OK!"
 		else
