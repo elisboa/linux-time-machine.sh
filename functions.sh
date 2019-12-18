@@ -132,10 +132,10 @@ function check-branch () {
 	if [[ "${CUR_BRANCH}" == "${TODAY_DATE}" ]]
 	
 	then
-		echo -e "-- already on today's current branch"
+		echo -e ": already on today's current branch"
 
 	else
-		echo -e "-- creating a new branch: ${COMMIT_DATE}"
+		echo -e ": creating a new branch: ${COMMIT_DATE}"
 		create-branch
 	fi	
 }
