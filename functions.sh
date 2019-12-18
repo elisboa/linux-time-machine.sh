@@ -90,7 +90,7 @@ function check-env () {
 
 	# Check whether git is a valid command
 	echo -n "git command status is: "
-	if command git --version > /dev/null 2>&1
+	if command git --no-pager --version > /dev/null 2>&1
 	then
 		echo -e "OK"
 	else
@@ -255,7 +255,7 @@ function create-tmgit-repo () {
 
 	# Try to initialize the git repository
 	if cd "${GIT_WORK_TREE}"/.tmgit ; then
-		if command git init .
+		if command git --no-pager init .
 		then
 			echo "Git init OK"
 		else
@@ -298,7 +298,7 @@ if command echo "*" > .gitignore
 # fi
 
 # Try to commit the newly added gitignore file
-if command git commit .gitignore -m "gitignore added with * entry"
+if command git --no-pager commit .gitignore -m "gitignore added with * entry"
 	then
     echo "Git commit OK"
 	else
@@ -337,5 +337,5 @@ fi
 #    fi
 #
 	# Now print repo status
-	git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
+	git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
 }
