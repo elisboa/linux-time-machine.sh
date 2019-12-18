@@ -23,6 +23,9 @@ function push-remote () {
 		#$TMGIT push ${remote_repo} --mirror 2> /dev/null
 		#... and push local branches, using update
 		$TMGIT push -u --set-upstream origin "${CUR_BRANCH}"
+		$TMGIT remote set-head origin "$CUR_BRANCH"
+		$TMGIT --no-pager remote -v
+
 		#$TMGIT push ${remote_repo} -u --follow-tags 2> /dev/null
 	done
 
