@@ -189,7 +189,7 @@ function remove-files () {
 
 		# Delete files using tmgit status and tmgit rm
 		#$TMGIT rm -f -r "$($TMGIT status | grep -E 'deleted:' | cut -d':' -f2 | xargs)"
-		$TMGIT -f -r "$($TMGIT log --diff-filter=D --name-only -n1)"
+		$TMGIT -f -r "$($TMGIT log --diff-filter=D --name-only -n1 | xargs)"
 
 }
 
