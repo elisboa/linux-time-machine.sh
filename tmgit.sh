@@ -41,6 +41,13 @@ function main () {
             export VERSION_ALL="True"
 	    fi
 
+        # Check if 'version-all' parameter was passed
+        if [[ ${argument} == "mirror-code" ]]
+	    then
+            echo -e "Mirroring last commit"
+            export MIRROR_MODE="True"
+	    fi
+
     done
 
     check-tmgit-repo "${GIT_WORK_TREE}"
