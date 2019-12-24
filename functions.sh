@@ -34,8 +34,16 @@ function push-remote () {
 function mirror-mode () {
 
 	set-vars "$1"
-	
 	echo "Debug: arguments passed -> $@"
+
+	echo -n "Trying to get last branch: "
+		if LAST_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | 	cut -c 3-)"
+		then
+			echo "$LAST_BRANCH"
+		else
+			echo -e "failed to get last branch"
+			exit 1
+		fi
 
 }
 
