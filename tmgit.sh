@@ -41,11 +41,17 @@ function main () {
             export VERSION_ALL="True"
 	    fi
 
-        # Check if 'version-all' parameter was passed
+        # Check if 'mirror-mode' parameter was passed
         if [[ ${argument} == "mirror-code" ]]
 	    then
-            echo -e "Mirroring last commit"
-            export MIRROR_MODE="True"
+            echo -e "Mirroring last commit "
+	        if mirror-all "${GIT_WORK_TREE}"
+	        then
+	            echo -e "Mirror OK"
+	        else
+	            echo -e "Mirror FAIL"
+	            exit 1
+	        fi
 	    fi
 
     done
