@@ -55,9 +55,9 @@ function set-vars () {
 	# Trying some fancy hack here, because this alias actually doesn't work. Only works when added to ~/.bashrc and script called in interactive mode, by '#!/bin/bash -i'...
 	GIT_BIN="$(command -v git)"
 	
-	# Here we can set some parameter for our git
-	GIT_PARAMS="--no-pager"
-	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
+	# Here we can set some arguments for our git
+	GIT_ARGS="--no-pager"
+	TMGIT="${GIT_BIN} ${GIT_ARGS}"
 
     ## Set vars
 	# Check which branch we are
@@ -307,7 +307,7 @@ if command git --no-pager commit .gitignore -m "gitignore added with * entry"
     exit 1
 fi
 
-### From now on, git must use custom parameters to refer to our versioned directory
+### From now on, git must use custom arguments to refer to our versioned directory
 
 	if cd "${GIT_WORK_TREE}" ; then
 		echo "Successfully changed to dir ${GIT_WORK_TREE}"
