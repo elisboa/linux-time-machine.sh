@@ -36,12 +36,13 @@ function main () {
 	    fi
 
         # Check if 'mirror-mode' parameter was passed
-        if [[ ${argument} == "mirror-code" ]]
+        if [[ ${argument} == "mirror-mode" ]]
 	    then
             echo -e "Mirroring last commit "
-	        if echo mirror-all "$GIT_WORK_TREE" $@
+	        if echo mirror-mode "$GIT_WORK_TREE" $@
 	        then
 	            echo -e "Mirror OK"
+                exit 0
 	        else
 	            echo -e "Mirror FAIL"
 	            exit 1
