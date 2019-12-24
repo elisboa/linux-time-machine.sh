@@ -45,7 +45,7 @@ function main () {
         if [[ ${argument} == "mirror-code" ]]
 	    then
             echo -e "Mirroring last commit "
-	        if mirror-all "${GIT_WORK_TREE}"
+	        if mirror-all "$GIT_WORK_TREE" $@
 	        then
 	            echo -e "Mirror OK"
 	        else
@@ -53,7 +53,6 @@ function main () {
 	            exit 1
 	        fi
 	    fi
-
     done
 
     check-tmgit-repo "${GIT_WORK_TREE}"
