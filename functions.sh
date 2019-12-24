@@ -30,6 +30,15 @@ function push-remote () {
 
 }
 
+# Mirror mode: always restore last commit, unless specified via argument
+function mirror-mode () {
+
+	set-vars "$1"
+	
+	echo "Debug: arguments passed -> $@"
+
+}
+
 # Set environment vars and aliases
 function set-vars () {
 
