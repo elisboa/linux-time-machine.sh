@@ -28,6 +28,7 @@ function main () {
 	        if push-remote "${GIT_WORK_TREE}"
 	        then
 	            echo -e "\nAll repos are done"
+                exit 0
 	        else
 	            echo -e "\nProblem pushing to remote repo ${GIT_WORK_TREE}"
 	            exit 1
