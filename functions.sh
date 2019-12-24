@@ -37,13 +37,22 @@ function mirror-mode () {
 	echo "Debug: arguments passed -> $@"
 
 	echo -n "Trying to get last branch: "
-		if LAST_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | 	cut -c 3-)"
-		then
-			echo "$LAST_BRANCH"
-		else
-			echo -e "failed to get last branch"
-			exit 1
-		fi
+	if MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | cut -c 3-)"
+	then
+		echo "$MIRROR_BRANCH"
+	else
+		echo -e "failed to get last branch as mirror branch"
+		exit 1
+	fi
+
+	echo -n "Checking out mirror branch: "
+	if $TMGIT checkout "$MIRROR_BRANCH" >& /dev/null
+	then
+		echo -e "OK"
+	else
+		echo -e "FAIL"
+		exit 1
+	fi
 
 }
 
