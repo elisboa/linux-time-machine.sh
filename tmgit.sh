@@ -39,7 +39,7 @@ function main () {
         if [[ ${argument} == "mirror-mode" ]]
 	    then
             echo -e "Mirroring last commit "
-	        if echo mirror-mode "$GIT_WORK_TREE" $@
+	        if mirror-mode "$GIT_WORK_TREE" $@
 	        then
 	            echo -e "Mirror OK"
                 exit 0
