@@ -34,13 +34,6 @@ function main () {
 	        fi
 	    fi
 
-        # Check if 'version-all' parameter was passed
-        if [[ ${argument} == "version-all" ]]
-	    then
-            echo -e "Versioning all files"
-            export VERSION_ALL="True"
-	    fi
-
         # Check if 'mirror-mode' parameter was passed
         if [[ ${argument} == "mirror-code" ]]
 	    then
@@ -53,6 +46,14 @@ function main () {
 	            exit 1
 	        fi
 	    fi
+        
+        # Check if 'version-all' parameter was passed
+        if [[ ${argument} == "version-all" ]]
+	    then
+            echo -e "Versioning all files"
+            export VERSION_ALL="True"
+	    fi
+
     done
 
     check-tmgit-repo "${GIT_WORK_TREE}"
