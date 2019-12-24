@@ -21,7 +21,7 @@ function main () {
 
 	for argument in "${@}"
     do
-	    # Check if parameters were passed
+	    # Check if arguments were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 	        echo -ne "\nPushing to remote repos: "
@@ -34,7 +34,7 @@ function main () {
 	        fi
 	    fi
 
-        # Check if 'version-all' parameter was passed
+        # Check if 'version-all' arguments was passed
         if [[ ${argument} == "version-all" ]]
 	    then
             echo -e "Versioning all files"
