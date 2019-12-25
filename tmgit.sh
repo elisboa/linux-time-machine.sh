@@ -8,46 +8,66 @@
 # Determine the order which all other functions are called
 function main () {
     
-    if [[ -d "${1}" ]] 
-    then
-        echo -e "${1} is a valid dir, using it as a work dir"
-        export GIT_WORK_TREE="${1}"
-    else
-        echo -e "Using $HOME as GIT_WORK_TREE"
-        export GIT_WORK_TREE="${HOME}"
-    fi
+#    if [[ -d "${1}" ]] 
+#    then
+#        echo -e "${1} is a valid dir, using it as a work dir"
+#        export GIT_WORK_TREE="${1}"
+#    else
+#        echo -e "Using $HOME as GIT_WORK_TREE"
+#        export GIT_WORK_TREE="${HOME}"
+#    fi
 
-    shift
+#    shift
 
-	for argument in "${@}"
+	for argument in "$@"
     do
-	    # Check if parameters were passed
+
+        echo -e "Now parsing argument: $argument"
+        # This whole code below should be optimized
+        if [[ -d "$argument" ]]
+        then
+            if [[ -z "$GIT_WORK_TREE" ]]
+            then
+                echo -e "Using $argument as a work dir"
+                export GIT_WORK_TREE="${argument}"
+            else
+                echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
+                export GIT_WORK_TREE="${HOME}"
+            fi
+        else
+            if [[ -z "$GIT_WORK_TREE" ]]
+            then
+                echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
+                export GIT_WORK_TREE="${HOME}"
+            fi
+        fi
+    
+        # Check if arguments were passed
 	    if [[ ${argument} == "push-remote" ]]
 	    then
 	        echo -ne "\nPushing to remote repos: "
 	        if push-remote "${GIT_WORK_TREE}"
 	        then
 	            echo -e "\nAll repos are done"
-                exit 0
+                exit 
 	        else
 	            echo -e "\nProblem pushing to remote repo ${GIT_WORK_TREE}"
 	            exit 1
 	        fi
 	    fi
 
-        # Check if 'mirror-mode' parameter was passed
-        if [[ ${argument} == "mirror-mode" ]]
-	    then
-            echo -e "Mirroring last commit "
-	        if mirror-mode "$GIT_WORK_TREE" $@
-	        then
-	            echo -e "Mirror OK"
-                exit 0
-	        else
-	            echo -e "Mirror FAIL"
-	            exit 1
-	        fi
-	    fi
+        if [[ "$argument" == "mirror-mode" ]]
+        then
+            echo -e "Entering mirror mode"
+            if mirror-mode $GIT_WORK_TREE "$@"
+            then
+                echo -e "Mirror mode ran successfully"
+                exit
+            else
+                echo -e "Mirror mode failed miserably"
+                exit 1
+            fi
+        fi
 
         # Check if 'version-all' parameter was passed
         if [[ ${argument} == "version-all" ]]
