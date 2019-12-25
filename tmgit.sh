@@ -22,7 +22,7 @@ function main () {
 	for argument in "$@"
     do
 
-        echo -e "Now parsing argument: $argument"
+        # echo -e "Now parsing argument: $argument"
         # This whole code below should be optimized
         if [[ -d "$argument" ]]
         then

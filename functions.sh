@@ -33,31 +33,68 @@ function push-remote () {
 # Mirror mode: always restore last commit, unless specified via argument
 function mirror-mode () {
 
+	# if I had to reset these vars, this would be the place
+	#unset MIRROR_BRANCH
+	#unset COMMIT_HASH
+
 	set-vars "$1"
-	echo "Debug: arguments passed -> $@"
+	#echo "Debug: arguments passed -> $@"
 
 	for argument in "$@"
 	do
-		echo -e "Now parsing argument: $argument"
+		#echo -e "Now parsing argument: $argument"
+
+		# check if we are in a valid repository 
+		$TMGIT status >& /dev/null || return 1
+
+		# Checking for a valid branch name passed as an argument
+		if MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | grep $argument | tail -n1 | cut -c 3- >& /dev/null)" && [[ -n "$MIRROR_BRANCH" ]]
+		then
+			echo -e "Mirror branch is now $MIRROR_BRANCH"
+		else
+			MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | cut -c 3- >& /dev/null)"
+		fi
+
+		# Now checking for a valid part of a commit hash passed as an argument
+		if [[ "$(git --no-pager cat-file -t $argument >& /dev/null)" == "commit" ]]
+		then
+			export COMMIT_HASH="$argument"
+			echo -e "Found a valid commit hash: $COMMIT_HASH"
+		fi
 	done
 
-	echo -n "Trying to get last branch: "
-	if MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | cut -c 3-)"
+	#echo debug mirror branch $MIRROR_BRANCH
+	#echo debug commit hash $COMMIT_HASH
+
+	# If we have a valid commit hash instead, try resetting to that
+	if [[ -n $COMMIT_HASH ]]
 	then
-		echo "$MIRROR_BRANCH"
-	else
-		echo -e "failed to get last branch as mirror branch"
-		exit 1
+		echo -n "Mirroring from commit hash $COMMIT_HASH: "
+		if $TMGIT reset --hard "$COMMIT_HASH" >& /dev/null
+		then
+			echo -e "OK"
+			return 0
+		else
+			echo -e "FAIL"
+			return 1
+		fi
 	fi
 
-	echo -n "Checking out mirror branch: "
-	if $TMGIT checkout "$MIRROR_BRANCH" >& /dev/null
+	# If we have a valid branch, then let's reset to it
+	if [[ -n "$MIRROR_BRANCH" ]]
 	then
-		echo -e "OK"
-	else
-		echo -e "FAIL"
-		exit 1
+		echo -n "Mirroring from branch $MIRROR_BRANCH: "
+		if $TMGIT reset --hard "$MIRROR_BRANCH" >& /dev/null
+		then
+			echo -e "OK"
+			return 0
+		else
+			echo -e "FAIL"
+			return 1
+		fi 
 	fi
+
+# this whole code above should be optimized
 
 }
 
