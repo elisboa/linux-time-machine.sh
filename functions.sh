@@ -124,8 +124,8 @@ function set-vars () {
 	GIT_BIN="$(command -v git)"
 	
 	# Here we can set some parameter for our git
-	GIT_PARAMS="--no-pager"
-	TMGIT="${GIT_BIN} ${GIT_PARAMS}"
+	GIT_ARGS="--no-pager"
+	TMGIT="${GIT_BIN} ${GIT_ARGS}"
 
     ## Set vars
 	# Check which branch we are
