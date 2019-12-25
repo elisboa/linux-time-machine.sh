@@ -36,6 +36,11 @@ function mirror-mode () {
 	set-vars "$1"
 	echo "Debug: arguments passed -> $@"
 
+	for argument in "$@"
+	do
+		echo -e "Now parsing argument: $argument"
+	done
+
 	echo -n "Trying to get last branch: "
 	if MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | cut -c 3-)"
 	then
