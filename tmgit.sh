@@ -24,6 +24,14 @@ function main () {
 
         # echo -e "Now parsing argument: $argument"
         # This whole code below should be optimized
+        
+        # Tell which version we are running
+        if [[ "$argument" == "-v" ]] || [[ "$argument" == "--version" ]] || [[ "$argument" == "version" ]]
+        then
+            echo "$(basename $0) version: $VERSION"
+            exit 0
+        fi
+
         if [[ -d "$argument" ]]
         then
             if [[ -z "$GIT_WORK_TREE" ]]
@@ -91,6 +99,8 @@ function main () {
 # Source all functions from functions.sh
 # shellcheck source=/dev/null
 source "$(dirname "${0}")"/functions.sh
+
+export VERSION="0.6"
 
 # Run main function
 main "$@"
