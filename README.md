@@ -20,7 +20,8 @@ You can use an argument to version all the files of a given dir. To do so, just 
 
 Currently the following arguments are supported:
 * push-remote — pushes your local git repository to all your configured remote repositories
-* mirror-mode — instead of version your current changes, it goes back in time and resets last valid branch. You can pass a custom branch or a (part of a) commit hash too
+* version-all — automatically adds every single file on the specified dir before versioning. This is useful if you have a /etc or a docs/ dir which you want do save everything
+* mirror-mode — instead of version your current changes, it goes back in time and resets last valid branch. You can pass a custom branch or a (part of a) commit hash too. This feature is available only on `dev` brach actually
 
 PS: the custom dir MUST BE the first argument. By default it uses your $HOME dir, if no custom_dir is specified.
 
