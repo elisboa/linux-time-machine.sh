@@ -1,5 +1,5 @@
 # linux-time-machine.sh
-A very, very simple and buggy time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
+A very, very simple time machine for Linux written in shell script that uses cron and git. This application is used to version your entire home directory using days as branches and minutely commits.
 
 ## Running
 
@@ -18,19 +18,24 @@ You can use an argument to version all the files of a given dir. To do so, just 
 ./tmgit.sh my_custom_dir version-all
 ```
 
+Currently the following arguments are supported:
+* push-remote — pushes your local git repository to all your configured remote repositories
+* mirror-mode — instead of version your current changes, it goes back in time and resets last valid branch. You can pass a custom branch or a (part of a) commit hash too
+
 PS: the custom dir MUST BE the first argument. By default it uses your $HOME dir, if no custom_dir is specified.
 
 ## Scheduling with cron
 
 If you must, you should edit your crontab to add the script, so you can run it automatically:
 ```
-** ** ** ** ** HISTFILE="" /home/elisboa/.scripts/tmgit.sh >> /tmp/tmgit.sh.log 2>&1
+** ** ** ** ** /home/elisboa/.scripts/tmgit.sh >& /tmp/tmgit.sh.log
 ```
 
 ## Adding files to your repository
 
 You must manually (and forcibly) add files or folders to you tmgit repository:
 ```
+alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 tmgit add -f my_file
 tmgit add -f my_folder
 ```
@@ -38,6 +43,7 @@ tmgit add -f my_folder
 
 If you want to remove:
 ```
+alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 tmgit rm -f --cached -r my_file
 ```
 It will not remove the dir or file from disk, only from your tmgit repository :)
@@ -46,9 +52,10 @@ It will not remove the dir or file from disk, only from your tmgit repository :)
 
 Detailed explanation:
 
-As seen in: 
-https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/
-This project aims to automatically version control files in your home directory using an aliased git and a customized workdir to store your git settings. Basically the tmgit repository is built using these commands: 
+[As seen here](https://www.electricmonk.nl/log/2015/06/22/keep-your-home-dir-in-git-with-a-detached-working-directory/), this project aims to automatically version control files in your home directory using an aliased git and a customized workdir to store your git settings. 
+
+
+A very simplified project's resume: basically the tmgit repository is built using these commands:
 
 ```
 mkdir -pv $HOME/.tmgit
@@ -59,7 +66,6 @@ git add -f .gitignore
 git commit -m "gitignore"
 alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 cd ~
-tmgit reset --hard
 tmgit status
 ```
 
