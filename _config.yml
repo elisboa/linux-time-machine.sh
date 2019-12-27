@@ -1,2 +1,8 @@
 theme: jekyll-theme-hacker
+title: Linux Time Machine
+description: A simple backup tool written in shell script that uses git and cron
+url: http://linux-time-machine.hackbox.link
+author: Eduardo Lisboa
+plugins:
+  - jekyll-seo-tag
 google_analytics: UA-155075220-1
