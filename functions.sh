@@ -203,7 +203,7 @@ function check-branch () {
 		echo -e ": already on today's current branch"
 
 	else
-		echo -e ": creating a new branch: ${COMMIT_DATE}"
+		echo -e ": creating a new branch: ${TODAY_DATE}"
 		create-branch
 	fi	
 }
@@ -324,7 +324,7 @@ function create-tmgit-repo () {
 
 	# Try to initialize the git repository
 	if cd "${GIT_WORK_TREE}"/.tmgit ; then
-		if command git --no-pager init .
+		if command git --no-pager --work-tree "$GIT_WORK_TREE" --git-dir "$GIT_WORK_TREE/.tmgit/.git" init .
 		then
 			echo "Git init OK"
 		else
@@ -347,7 +347,7 @@ function create-tmgit-repo () {
 
 
 # Try to create a gitignore file on the repository
-if command echo "*" > .gitignore
+if command echo "*" > "$GIT_WORK_TREE/.gitignore"
    then
        echo "gitignore file created OK"
  else
@@ -358,16 +358,16 @@ if command echo "*" > .gitignore
 # Try to add gitignore file to repository
 # Lines below were commented out because
 # I don't think we actually need to version our .gitignore file
-#if command git add -f .gitignore
-#   then
-#       echo "Git add OK."
-#   else
-#       echo "Git add FAIL. Exiting now"
-#       exit 1
-# fi
+	if command git add -f  "$GIT_WORK_TREE/.gitignore"
+	then
+		echo "Git add OK."
+	else
+  	echo "Git add FAIL. Exiting now"
+    exit 1
+	fi
 
 # Try to commit the newly added gitignore file
-if command git --no-pager commit .gitignore -m "gitignore added with * entry"
+if command git --no-pager commit  "$GIT_WORK_TREE/.gitignore" -m "gitignore added with * entry"
 	then
     echo "Git commit OK"
 	else
