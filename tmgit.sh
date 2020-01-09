@@ -24,6 +24,14 @@ function main () {
 
         # echo -e "Now parsing argument: $argument"
         # This whole code below should be optimized
+        
+        # Tell which version we are running
+        if [[ "$argument" == "-v" ]] || [[ "$argument" == "--version" ]] || [[ "$argument" == "version" ]]
+        then
+            echo "$(basename $0) version: $VERSION"
+            exit 0
+        fi
+
         if [[ -d "$argument" ]]
         then
             if [[ -z "$GIT_WORK_TREE" ]]
@@ -59,7 +67,7 @@ function main () {
         if [[ "$argument" == "mirror-mode" ]]
         then
             echo -e "Entering mirror mode"
-            if mirror-mode $GIT_WORK_TREE "$@"
+            if mirror-mode "$GIT_WORK_TREE" "$@"
             then
                 echo -e "Mirror mode ran successfully"
                 exit
@@ -90,7 +98,21 @@ function main () {
 
 # Source all functions from functions.sh
 # shellcheck source=/dev/null
-source "$(dirname "${0}")"/functions.sh
+#source "$(dirname "${0}")"/functions.sh # old code to import functions.sh
+# source specific files as function sources
+for file in functions arguments
+do
+    echo -n "Importing file $file: "
+    if source "$(dirname $0)/$file.sh" >& /dev/null
+    then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+done
+
+export VERSION="0.7"
 
 # Run main function
 main "$@"

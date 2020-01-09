@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+# shellcheck disable=SC2148
 # shellcheck disable=SC2063
 # shellcheck disable=SC2035
 
@@ -7,96 +6,6 @@
 # This file isn't meant to be run. It's a collection of functions used by other scripts
 # Author: Eduardo Lisboa <eduardo.lisboa@gmail.com>
 # Date: 2019 - 01 - 04
-
-# Push to remote, mirroring repository
-function push-remote () {
-
-	set-vars "$1"
-	
-	# For each remote repository, do...
-	$TMGIT remote 2> /dev/null |\
-	while read -r remote_repo
-	do
-		# ... show repo name...
-		echo -n "${remote_repo} "
-		# ... and push local branches, using mirror
-		#$TMGIT push ${remote_repo} --mirror 2> /dev/null
-		#... and push local branches, using update
-		$TMGIT push -u --set-upstream origin "${CUR_BRANCH}"
-		$TMGIT remote -v
-
-		#$TMGIT push ${remote_repo} -u --follow-tags 2> /dev/null
-	done
-
-}
-
-# Mirror mode: always restore last commit, unless specified via argument
-function mirror-mode () {
-
-	# if I had to reset these vars, this would be the place
-	#unset MIRROR_BRANCH
-	#unset COMMIT_HASH
-
-	set-vars "$1"
-	#echo "Debug: arguments passed -> $@"
-
-	for argument in "$@"
-	do
-		#echo -e "Now parsing argument: $argument"
-
-		# check if we are in a valid repository 
-		$TMGIT status >& /dev/null || return 1
-
-		# Checking for a valid branch name passed as an argument
-		if MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | grep $argument | tail -n1 | cut -c 3- >& /dev/null)" && [[ -n "$MIRROR_BRANCH" ]]
-		then
-			echo -e "Mirror branch is now $MIRROR_BRANCH"
-		else
-			MIRROR_BRANCH="$($TMGIT branch -a | grep -Ev 'master|remotes' | tail -n1 | cut -c 3- >& /dev/null)"
-		fi
-
-		# Now checking for a valid part of a commit hash passed as an argument
-		if [[ "$(git --no-pager cat-file -t $argument >& /dev/null)" == "commit" ]]
-		then
-			export COMMIT_HASH="$argument"
-			echo -e "Found a valid commit hash: $COMMIT_HASH"
-		fi
-	done
-
-	#echo debug mirror branch $MIRROR_BRANCH
-	#echo debug commit hash $COMMIT_HASH
-
-	# If we have a valid commit hash instead, try resetting to that
-	if [[ -n $COMMIT_HASH ]]
-	then
-		echo -n "Mirroring from commit hash $COMMIT_HASH: "
-		if $TMGIT reset --hard "$COMMIT_HASH" >& /dev/null
-		then
-			echo -e "OK"
-			return 0
-		else
-			echo -e "FAIL"
-			return 1
-		fi
-	fi
-
-	# If we have a valid branch, then let's reset to it
-	if [[ -n "$MIRROR_BRANCH" ]]
-	then
-		echo -n "Mirroring from branch $MIRROR_BRANCH: "
-		if $TMGIT reset --hard "$MIRROR_BRANCH" >& /dev/null
-		then
-			echo -e "OK"
-			return 0
-		else
-			echo -e "FAIL"
-			return 1
-		fi 
-	fi
-
-# this whole code above should be optimized
-
-}
 
 # Set environment vars and aliases
 function set-vars () {
@@ -203,7 +112,7 @@ function check-branch () {
 		echo -e ": already on today's current branch"
 
 	else
-		echo -e ": creating a new branch: ${COMMIT_DATE}"
+		echo -e ": creating a new branch: ${TODAY_DATE}"
 		create-branch
 	fi	
 }
@@ -228,7 +137,7 @@ function check-commit () {
 	if [[ "${1}" == "True" ]]
 	then
 		echo -ne "Adding all files in ${GIT_WORK_TREE}: "
-		if $TMGIT add -f * > /dev/null 2>&1
+		if $TMGIT add -f \* > /dev/null 2>&1
 		then
 			echo "SUCCESS"
 		else
@@ -324,7 +233,7 @@ function create-tmgit-repo () {
 
 	# Try to initialize the git repository
 	if cd "${GIT_WORK_TREE}"/.tmgit ; then
-		if command git --no-pager init .
+		if command git --no-pager --work-tree "$GIT_WORK_TREE" --git-dir "$GIT_WORK_TREE/.tmgit/.git" init .
 		then
 			echo "Git init OK"
 		else
@@ -347,7 +256,7 @@ function create-tmgit-repo () {
 
 
 # Try to create a gitignore file on the repository
-if command echo "*" > .gitignore
+if command echo "*" > "$GIT_WORK_TREE/.gitignore"
    then
        echo "gitignore file created OK"
  else
@@ -358,16 +267,16 @@ if command echo "*" > .gitignore
 # Try to add gitignore file to repository
 # Lines below were commented out because
 # I don't think we actually need to version our .gitignore file
-#if command git add -f .gitignore
-#   then
-#       echo "Git add OK."
-#   else
-#       echo "Git add FAIL. Exiting now"
-#       exit 1
-# fi
+	if command git add -f  "$GIT_WORK_TREE/.gitignore"
+	then
+		echo "Git add OK."
+	else
+  	echo "Git add FAIL. Exiting now"
+    exit 1
+	fi
 
 # Try to commit the newly added gitignore file
-if command git --no-pager commit .gitignore -m "gitignore added with * entry"
+if command git --no-pager commit  "$GIT_WORK_TREE/.gitignore" -m "gitignore added with * entry"
 	then
     echo "Git commit OK"
 	else
@@ -396,15 +305,15 @@ fi
 #	git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" add -f "${GIT_WORK_TREE}/.gitignore"
 
 	# Go to $GIT_WORK_TREE dir, reset repository (with an * on gitignore, nothing should happen, actually)
-#    cd "${GIT_WORK_TREE}"
-#    if git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" reset --hard
-#    then
-#        echo "tmgit reset OK"
-#    else
-#        echo "tmgit reset FAIL. Exiting now"
-#        exit 1
-#    fi
-#
+    cd "${GIT_WORK_TREE}"
+    if git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" reset --hard
+    then
+        echo "tmgit reset OK"
+    else
+        echo "tmgit reset FAIL. Exiting now"
+        exit 1
+    fi
+
 	# Now print repo status
 	git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
 }
