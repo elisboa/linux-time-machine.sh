@@ -103,7 +103,7 @@ function main () {
 for file in functions arguments
 do
     echo -n "Importing file $file: "
-    if source "$(dirname $0)/$file" >& /dev/null
+    if source "$(dirname $0)/$file.sh" >& /dev/null
     then
         echo "OK"
     else
