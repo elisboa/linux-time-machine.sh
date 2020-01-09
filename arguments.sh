@@ -1,3 +1,5 @@
+# shellcheck disable=SC2148
+
 # Push to remote, mirroring repository
 function push-remote () {
 
