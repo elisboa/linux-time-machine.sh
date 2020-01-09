@@ -98,7 +98,19 @@ function main () {
 
 # Source all functions from functions.sh
 # shellcheck source=/dev/null
-source "$(dirname "${0}")"/functions.sh
+#source "$(dirname "${0}")"/functions.sh # old code to import functions.sh
+# source specific files as function sources
+for file in functions arguments
+do
+    echo -n "Importing file $file: "
+    if source "$(dirname $0)/$file" >& /dev/null
+    then
+        echo "OK"
+    else
+        echo "FAIL"
+        exit 1
+    fi
+done
 
 export VERSION="0.6"
 
