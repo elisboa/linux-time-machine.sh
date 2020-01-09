@@ -137,7 +137,7 @@ function check-commit () {
 	if [[ "${1}" == "True" ]]
 	then
 		echo -ne "Adding all files in ${GIT_WORK_TREE}: "
-		if $TMGIT add -f * > /dev/null 2>&1
+		if $TMGIT add -f \* > /dev/null 2>&1
 		then
 			echo "SUCCESS"
 		else
