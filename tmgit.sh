@@ -67,7 +67,7 @@ function main () {
         if [[ "$argument" == "mirror-mode" ]]
         then
             echo -e "Entering mirror mode"
-            if mirror-mode $GIT_WORK_TREE "$@"
+            if mirror-mode "$GIT_WORK_TREE" "$@"
             then
                 echo -e "Mirror mode ran successfully"
                 exit
