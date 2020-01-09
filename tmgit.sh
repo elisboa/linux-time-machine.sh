@@ -112,7 +112,7 @@ do
     fi
 done
 
-export VERSION="0.6"
+export VERSION="0.7"
 
 # Run main function
 main "$@"
