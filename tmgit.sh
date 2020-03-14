@@ -81,7 +81,9 @@ function main () {
         if [[ ${argument} == "version-all" ]]
 	    then
             echo -e "Versioning all files"
-            export VERSION_ALL="True"
+            export VERSION_ALL="TRUE"
+        else
+            export VERSION_ALL="FALSE"
 	    fi
 
     done

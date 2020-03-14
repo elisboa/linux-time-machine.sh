@@ -139,30 +139,17 @@ function check-commit () {
 		remove-files
 	fi
 
-	# Check version-all argument
-	if [[ "${1}" == "True" ]]
+	# Check if any file was changed
+	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
 	then
-		echo -ne "Adding all files in ${GIT_WORK_TREE}: "
-		#if $TMGIT add -f ${GIT_WORK_TREE} > /dev/null 2>&1
-		if find_and_git-add >& /dev/null
+		echo -e "Working tree is clean, yay : )"
+	else
+		echo -e "Trying to commit changes"
+		if commit-changes
 		then
-			echo -e "SUCCESS"
-			# Check if any file was changed
-			if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
-			then
-				echo -e "Working tree is clean, yay : )"
-			else
-				echo -e "Trying to commit changes"
-				if commit-changes
-				then
-					echo -e "Changes committed successfully"
-				else
-					echo -e "Couldn't commit changes this time :/"
-				fi
-			fi
+			echo -e "Changes committed successfully"
 		else
-			echo "FAILURE"
-			exit 1
+			echo -e "Couldn't commit changes this time :/"
 		fi
 	fi
 	
@@ -179,6 +166,7 @@ function remove-files () {
 
 function commit-changes () {
 
+	echo -e VERSION_ALL status: $VERSION_ALL
 	echo -e "Starting commit ${COMMIT_DATE}"
 
 	# Commit changes to branch
