@@ -124,12 +124,6 @@ function create-branch () {
 	$TMGIT checkout -b "${TODAY_DATE}"
 }
 
-function find_and_git-add () {
-	# I'm NOT proud of this code
-	# This function shouldn't even exist
-	find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} >& /dev/null \;
-}
-
 # Check what is needed to commit or remove
 function check-commit () {
 
@@ -140,17 +134,11 @@ function check-commit () {
 	fi
 
 	# The version-all argument code must be set HERE
-	if VERSION_ALL="TRUE"
+	if [[ $VERSION_ALL == "TRUE" ]]
 	then
 		echo -ne "Versioning ALL files... "
-		if find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} \; 2>& /dev/null
-		then
-			echo SUCCESSFUL
-		else
-			echo FAILED
-		fi
+		find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} > /dev/null 2>&1 \; > /dev/null 2>&1 && echo SUCCESSFUL || echo FAILED
 	fi
-
 
 	# Check if any file was changed
 	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
@@ -183,14 +171,14 @@ function commit-changes () {
 
 	# Commit changes to branch
 	if cd "${GIT_WORK_TREE}" ; then
-		${TMGIT} ls-files | while read -r file ; do ${TMGIT} add -f "${file}" ; done
+		${TMGIT} ls-files >& /dev/null | while read -r file ; do ${TMGIT} add -f "${file}" ; done
 		#$TMGIT reset -- .dotfiles
 		#$TMGIT rm --cached .tmgit > /dev/null 2>&1 
 		echo ""
 		echo "running ${TMGIT} status"
 		$TMGIT status
 		echo ""
-		if $TMGIT commit -a -m "$($TMGIT diff HEAD --name-only | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}"
+		if $TMGIT commit -a -m "$($TMGIT diff HEAD --name-only | xargs ; echo -e "\n") Automated commit at ${COMMIT_DATE}" >& /dev/null
 		then
 			echo -e "Commit is OK!"
 		else
