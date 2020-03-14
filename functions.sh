@@ -124,6 +124,12 @@ function create-branch () {
 	$TMGIT checkout -b "${TODAY_DATE}"
 }
 
+function find_and_git-add () {
+	# I'm NOT proud of this code
+	# This function shouldn't even exist
+	find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} >& /dev/null \;
+}
+
 # Check what is needed to commit or remove
 function check-commit () {
 
@@ -137,28 +143,29 @@ function check-commit () {
 	if [[ "${1}" == "True" ]]
 	then
 		echo -ne "Adding all files in ${GIT_WORK_TREE}: "
-		if $TMGIT add -f \* > /dev/null 2>&1
+		#if $TMGIT add -f ${GIT_WORK_TREE} > /dev/null 2>&1
+		if find_and_git-add >& /dev/null
 		then
-			echo "SUCCESS"
+			echo -e "SUCCESS"
+			# Check if any file was changed
+			if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
+			then
+				echo -e "Working tree is clean, yay : )"
+			else
+				echo -e "Trying to commit changes"
+				if commit-changes
+				then
+					echo -e "Changes committed successfully"
+				else
+					echo -e "Couldn't commit changes this time :/"
+				fi
+			fi
 		else
 			echo "FAILURE"
 			exit 1
 		fi
 	fi
-
-	# Check if any file was changed
-	if $TMGIT status | grep 'working tree clean' > /dev/null 2>&1
-	then
-		echo -e "Working tree is clean, yay : )"
-	else
-		echo -e "Trying to commit changes"
-		if commit-changes
-		then
-			echo -e "Changes committed successfully"
-		else
-			echo -e "Couldn't commit changes this time :/"
-		fi
-	fi
+	
 }
 
 # Remove from repo files which were removed from the disk
