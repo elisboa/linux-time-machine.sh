@@ -166,8 +166,19 @@ function remove-files () {
 
 function commit-changes () {
 
-	echo -e VERSION_ALL status: $VERSION_ALL
+	# echo -e VERSION_ALL status: $VERSION_ALL # DEBUG
 	echo -e "Starting commit ${COMMIT_DATE}"
+
+	if VERSION_ALL="TRUE"
+	then
+		echo -ne "Versioning ALL files... "
+		if find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} \; 2>& /dev/null
+		then
+			echo SUCCESSFUL
+		else
+			echo FAILED
+		fi
+	fi
 
 	# Commit changes to branch
 	if cd "${GIT_WORK_TREE}" ; then
