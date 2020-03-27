@@ -1,4 +1,4 @@
-theme: jekyll-theme-hacker
+theme: jekyll-theme-time-machine
 title: Linux Time Machine
 description: A simple backup tool written in shell script that uses git and cron
 url: http://linux-time-machine.hackbox.link
