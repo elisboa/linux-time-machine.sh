@@ -315,12 +315,72 @@ fi
 
 function add-file() {
 
+	# Core code
 	if $TMGIT add -f $1
 	then
 		echo -e "SUCCESS"
 	else
 		echo -e "FAIL"
-		break
+		return 1
 	fi
+
+}
+
+
+function del-file() {
+
+	# Core code
+	if $TMGIT -f -r "$1"
+	then
+		echo -e "SUCCESS"
+	else
+		echo -e "FAIL"
+		return 1
+	fi
+
+}
+
+
+function check-add-file() {
+
+	if [[ -n $1 ]]
+        then
+
+            if [[ -f $1 ]]
+            then
+                export ADD_FILE_TYPE="file"
+            elif [[ -d $1 ]]
+            then 
+                export ADD_FILE_TYPE="directory"
+            else
+                echo -e "$1 is neither a regular file nor directory!\nNot adding any new files or directories"
+			return 1
+            fi
+            # Gotta find a better name for this var, I know
+            echo -ne "Trying to remove $ADD_FILE_TYPE $1: "
+            add-file $1 && shift
+        fi
+
+}
+
+function check-del-file() {
+
+	if [[ -n $1 ]]
+        then
+
+            if [[ -f $1 ]]
+            then
+                export DEL_FILE_TYPE="file"
+            elif [[ -d $1 ]]
+            then 
+                export DEL_FILE_TYPE="directory"
+            else
+                echo -e "$1 is neither a regular file nor directory!\nNot adding any new files or directories"
+			return 1
+            fi
+            # Gotta find a better name for this var, I know
+            echo -ne "Trying to add $DEL_FILE_TYPE $1: "
+            del-file $1 && shift
+        fi
 
 }
