@@ -19,6 +19,10 @@ function main () {
 
 #    shift
 
+
+# set-vars must be called before anything 
+set-vars $GIT_WORK_TREE
+
 while (( "$#" ))
 do
 
