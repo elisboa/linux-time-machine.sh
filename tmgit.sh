@@ -98,8 +98,8 @@ do
             then 
                 export ADD_FILE_TYPE="directory"
             else
-                echo -e "$2 is not a regular file or directory."
-                exit 1
+                echo -e "$2 is neither a regular file nor directory!\nNot adding any new files or directories"
+                break
             fi
             # Gotta find a better name for this var, I know
             echo -e "Trying to add $ADD_FILE_TYPE: $2"
