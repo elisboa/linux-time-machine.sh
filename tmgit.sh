@@ -102,7 +102,13 @@ do
                 break
             fi
             # Gotta find a better name for this var, I know
-            echo -e "Trying to add $ADD_FILE_TYPE: $2"
+            echo -ne "Trying to add $ADD_FILE_TYPE $2: "
+            if add-file
+            then
+                echo -e "SUCCESS"
+            else
+                echo -e "FAILED"
+                break
         fi
 
         shift
