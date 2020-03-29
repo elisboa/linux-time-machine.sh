@@ -312,3 +312,9 @@ fi
 	# Now print repo status
 	git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
 }
+
+function add-file() {
+
+
+
+}
