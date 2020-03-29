@@ -117,8 +117,6 @@ do
 
       check-tmgit-repo "${GIT_WORK_TREE}"
 
-      set-vars "${GIT_WORK_TREE}"
-
       check-branch
 
       check-commit "${VERSION_ALL}"
