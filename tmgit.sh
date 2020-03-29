@@ -86,7 +86,14 @@ function main () {
         else
             export VERSION_ALL="FALSE"
 	    fi
-    
+
+        if [[ $1 == "add-file" ]] && [[ -n $2 ]]
+        then
+
+            echo adding file $2
+
+        fi
+
         shift
 
     done
