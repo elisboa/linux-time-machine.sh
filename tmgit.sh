@@ -91,24 +91,16 @@ do
           export VERSION_ALL="FALSE"
         fi
 
-        # Checking if "add-file" parameter was passed
-        # This whole code should be ported to add-file function later
-        if [[ $1 == "add-file" ]] && [[ -n $2 ]]
+        # Calling check-add-file function
+        if [[ $1 == "add-file" ]]
         then
+            check-add-file $2 && shift
+        fi
 
-            if [[ -f $2 ]]
-            then
-                export ADD_FILE_TYPE="file"
-            elif [[ -d $2 ]]
-            then 
-                export ADD_FILE_TYPE="directory"
-            else
-                echo -e "$2 is neither a regular file nor directory!\nNot adding any new files or directories"
-                break
-            fi
-            # Gotta find a better name for this var, I know
-            echo -ne "Trying to add $ADD_FILE_TYPE $2: "
-            add-file $2 && shift
+        # Calling check-add-file function
+        if [[ $1 == "del-file" ]]
+        then
+            check-del-file $2 && shift
         fi
 
         shift
