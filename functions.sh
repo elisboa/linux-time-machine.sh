@@ -10,6 +10,8 @@
 # Set environment vars and aliases
 function set-vars () {
 
+	export VERSION="0.9"
+	
 	export GIT_AUTHOR_NAME="Tmgit Script"
 	export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
 	
@@ -262,7 +264,7 @@ if command echo "*" > "$GIT_WORK_TREE/.gitignore"
 # Try to add gitignore file to repository
 # Lines below were commented out because
 # I don't think we actually need to version our .gitignore file
-	if command git add -f  "$GIT_WORK_TREE/.gitignore"
+	if command git add -f "$GIT_WORK_TREE/.gitignore"
 	then
 		echo "Git add OK."
 	else
@@ -311,4 +313,76 @@ fi
 
 	# Now print repo status
 	git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
+}
+
+function add-file() {
+
+	# Core code
+	if $TMGIT add -f $1
+	then
+		echo -e "SUCCESS"
+	else
+		echo -e "FAIL"
+		return 1
+	fi
+
+}
+
+
+function del-file() {
+
+	# Core code
+	if $TMGIT -f -r "$1"
+	then
+		echo -e "SUCCESS"
+	else
+		echo -e "FAIL"
+		return 1
+	fi
+
+}
+
+
+function check-add-file() {
+
+	if [[ -n $1 ]]
+        then
+
+            if [[ -f $1 ]]
+            then
+                export ADD_FILE_TYPE="file"
+            elif [[ -d $1 ]]
+            then 
+                export ADD_FILE_TYPE="directory"
+            else
+                echo -e "$1 is neither a regular file nor directory!\nNot adding any new files or directories"
+			return 1
+            fi
+            # Gotta find a better name for this var, I know
+            echo -ne "Trying to remove $ADD_FILE_TYPE $1: "
+            add-file $1 && shift
+        fi
+
+}
+
+function check-del-file() {
+
+	if [[ -n $1 ]]
+        then
+
+            if [[ -f $1 ]]
+            then
+                export DEL_FILE_TYPE="file"
+            elif [[ -d $1 ]]
+            then 
+                export DEL_FILE_TYPE="directory"
+            else
+                echo -e "$1 is neither a regular file nor directory!\nNot adding any new files or directories"
+			return 1
+            fi
+            # Gotta find a better name for this var, I know
+            echo -ne "Trying to add $DEL_FILE_TYPE $1: "
+            del-file $1 && shift
+        fi
+
 }
