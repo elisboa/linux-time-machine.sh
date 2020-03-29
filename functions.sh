@@ -262,7 +262,7 @@ if command echo "*" > "$GIT_WORK_TREE/.gitignore"
 # Try to add gitignore file to repository
 # Lines below were commented out because
 # I don't think we actually need to version our .gitignore file
-	if command git add -f  "$GIT_WORK_TREE/.gitignore"
+	if command git add -f "$GIT_WORK_TREE/.gitignore"
 	then
 		echo "Git add OK."
 	else
@@ -315,6 +315,12 @@ fi
 
 function add-file() {
 
-
+	if $TMGIT add -f $1
+	then
+		echo -e "SUCCESS"
+	else
+		echo -e "FAIL"
+		break
+	fi
 
 }
