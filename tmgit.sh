@@ -19,24 +19,25 @@ function main () {
 
 #    shift
 
-	for argument in "$@"
+    while (( "$#" ))
     do
 
-        # echo -e "Now parsing argument: $argument"
+        echo -e "Now parsing argument: $1"
+        
         # This whole code below should be optimized
         
         # Tell which version we are running
-        if [[ "$argument" == "-v" ]] || [[ "$argument" == "--version" ]] || [[ "$argument" == "version" ]]
+        if [[ "$1" == "-v" ]] || [[ "$1" == "--version" ]] || [[ "$1" == "version" ]]
         then
             echo "$(basename $0) version: $VERSION"
             exit 0
         fi
 
-        if [[ -d "$argument" ]]
+        if [[ -d "$1" ]]
         then
             if [[ -z "$GIT_WORK_TREE" ]]
             then
-                echo -e "Using $argument as a work dir"
+                echo -e "Using $1 as a work dir"
                 export GIT_WORK_TREE="${argument}"
             else
                 echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
@@ -64,7 +65,7 @@ function main () {
 	        fi
 	    fi
 
-        if [[ "$argument" == "mirror-mode" ]]
+        if [[ "$1" == "mirror-mode" ]]
         then
             echo -e "Entering mirror mode"
             if mirror-mode "$GIT_WORK_TREE" "$@"
@@ -78,13 +79,15 @@ function main () {
         fi
 
         # Check if 'version-all' parameter was passed
-        if [[ ${argument} == "version-all" ]]
+        if [[ $1 == "version-all" ]]
 	    then
             echo -e "Versioning all files"
             export VERSION_ALL="TRUE"
         else
             export VERSION_ALL="FALSE"
 	    fi
+    
+        shift
 
     done
 
