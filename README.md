@@ -34,15 +34,30 @@ If you must, you should edit your crontab to add the script, so you can run it a
 
 ## Adding files to your repository
 
-You must manually (and forcibly) add files or folders to you tmgit repository:
+Now you can use `add-file` argument to automatically add files or folders, like this:
+```
+./tmgit.sh add-file file_or_folder
+```
+
+It will automatically check if the following argument is a file or a folder.
+
+But ou can also must manually (and forcibly) add files or folders to you tmgit repository:
 ```
 alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 tmgit add -f my_file
 tmgit add -f my_folder
 ```
+
 ## Removing files
 
-If you want to remove:
+Now you can use `del-file` argument to automatically delete files or folders, like this:
+```
+./tmgit.sh add-file file_or_folder
+```
+
+It will automatically check if the following argument is a file or a folder. Note that this will only remove the file or folder from your tmgit repository, not from the disc.
+
+Otherwise, you can manually remove:
 ```
 alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 tmgit rm -f --cached -r my_file
