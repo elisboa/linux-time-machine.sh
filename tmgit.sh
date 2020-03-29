@@ -92,6 +92,7 @@ do
         fi
 
         # Checking if "add-file" parameter was passed
+        # This whole code should be ported to add-file function later
         if [[ $1 == "add-file" ]] && [[ -n $2 ]]
         then
 
@@ -107,12 +108,7 @@ do
             fi
             # Gotta find a better name for this var, I know
             echo -ne "Trying to add $ADD_FILE_TYPE $2: "
-            if add-file
-            then
-                echo -e "SUCCESS"
-            else
-                echo -e "FAILED"
-                break
+            add-file $2 && shift
         fi
 
         shift
