@@ -359,7 +359,7 @@ then
     return 1
   fi
   # Gotta find a better name for this var, I know
-  echo -ne "Trying to remove $ADD_FILE_TYPE $1: "
+  echo -ne "Trying to add $ADD_FILE_TYPE $1: "
   add-file $1 && shift
 fi
 
@@ -381,7 +381,7 @@ then
     return 1
   fi
   # Gotta find a better name for this var, I know
-  echo -ne "Trying to add $DEL_FILE_TYPE $1: "
+  echo -ne "Trying to remove $DEL_FILE_TYPE $1: "
   del-file $1 && shift
 fi
 
