@@ -105,7 +105,7 @@ EoF
 
 function check-branch () {
 
-echo -n "Current branch is: ${CUR_BRANCH} "
+echo -n "Current branch is: ${CUR_BRANCH}"
 
   # Check whether we need a new branch or not
   if [[ "${CUR_BRANCH}" == "${TODAY_DATE}" ]]
