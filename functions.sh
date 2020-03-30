@@ -11,7 +11,7 @@
 # Set environment vars and aliases
 function set-vars () {
 
-export VERSION="0.9.5"
+export VERSION="0.9.6"
 
 export GIT_AUTHOR_NAME="Tmgit Script"
 export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
@@ -303,16 +303,16 @@ fi
 #	git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" add -f "${GIT_WORK_TREE}/.gitignore"
 
   # Go to $GIT_WORK_TREE dir, reset repository (with an * on gitignore, nothing should happen, actually)
-	if cd "$GIT_WORK_TREE"
-	then
-		if git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" reset --hard
-		then
-			echo "tmgit reset OK"
-		else
-			echo "tmgit reset FAIL. Exiting now"
-			exit 1
-		fi
-	fi
+  if cd "$GIT_WORK_TREE"
+  then
+    if git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" reset --hard
+    then
+      echo "tmgit reset OK"
+    else
+      echo "tmgit reset FAIL. Exiting now"
+      exit 1
+    fi
+  fi
 
   # Now print repo status
   git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
@@ -320,14 +320,14 @@ fi
 
 function add-file() {
 
-	# Core code
-	if "$TMGIT" add -f "$1"
-	then
-		echo -e "SUCCESS"
-	else
-		echo -e "FAIL"
-		return 1
-	fi
+  # Core code
+  if "$TMGIT" add -f "$1"
+  then
+    echo -e "SUCCESS"
+  else
+    echo -e "FAIL"
+    return 1
+  fi
 
 }
 
