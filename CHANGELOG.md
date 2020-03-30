@@ -1,7 +1,9 @@
+**Released new version: 0.9.6**
+- applied some shellcheck recommendations
+
 **Released new version: 0.9.5**
 - fixed CHANGELOG history
 - fixed typo on tmgit.sh#45
-- 
 
 **Released new version: 0.9.3**
 - Fixed message issues
