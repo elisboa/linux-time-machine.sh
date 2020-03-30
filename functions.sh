@@ -1,3 +1,4 @@
+# shellcheck shell=bash
 # shellcheck disable=SC2148
 # shellcheck disable=SC2063
 # shellcheck disable=SC2035
@@ -139,7 +140,7 @@ function check-commit () {
   if [[ $VERSION_ALL == "TRUE" ]]
   then
     echo -ne "Versioning ALL files... "
-    find $GIT_WORK_TREE -type f -not -path $GIT_WORK_TREE/.tmgit/* -exec git add -f {} > /dev/null 2>&1 \; > /dev/null 2>&1 && echo SUCCESSFUL || echo FAILED
+    find "$GIT_WORK_TREE" -type f -not -path "$GIT_WORK_TREE/.tmgit/*" -exec git add -f {} \; >& /dev/null && echo SUCCESSFUL || echo FAILED
   fi
 
   # Check if any file was changed
@@ -302,14 +303,16 @@ fi
 #	git --git-dir "${GIT_WORK_TREE}"/.dotfiles/.git --work-tree "${GIT_WORK_TREE}" add -f "${GIT_WORK_TREE}/.gitignore"
 
   # Go to $GIT_WORK_TREE dir, reset repository (with an * on gitignore, nothing should happen, actually)
-  cd "${GIT_WORK_TREE}"
-  if git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" reset --hard
-  then
-    echo "tmgit reset OK"
-  else
-    echo "tmgit reset FAIL. Exiting now"
-    exit 1
-  fi
+	if cd "$GIT_WORK_TREE"
+	then
+		if git --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" reset --hard
+		then
+			echo "tmgit reset OK"
+		else
+			echo "tmgit reset FAIL. Exiting now"
+			exit 1
+		fi
+	fi
 
   # Now print repo status
   git --no-pager --git-dir "${GIT_WORK_TREE}"/.tmgit/.git --work-tree "${GIT_WORK_TREE}" status
@@ -317,14 +320,14 @@ fi
 
 function add-file() {
 
-  # Core code
-  if $TMGIT add -f $1
-  then
-    echo -e "SUCCESS"
-  else
-    echo -e "FAIL"
-    return 1
-  fi
+	# Core code
+	if "$TMGIT" add -f "$1"
+	then
+		echo -e "SUCCESS"
+	else
+		echo -e "FAIL"
+		return 1
+	fi
 
 }
 
@@ -360,7 +363,7 @@ then
   fi
   # Gotta find a better name for this var, I know
   echo -ne "Trying to add $ADD_FILE_TYPE $1: "
-  add-file $1 && shift
+  add-file "$1" && shift
 fi
 
 }
@@ -382,7 +385,7 @@ then
   fi
   # Gotta find a better name for this var, I know
   echo -ne "Trying to remove $DEL_FILE_TYPE $1: "
-  del-file $1 && shift
+  del-file "$1" && shift
 fi
 
 }
