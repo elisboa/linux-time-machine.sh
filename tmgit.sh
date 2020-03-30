@@ -21,7 +21,7 @@ function main () {
 
 
 # set-vars must be called before anything 
-set-vars $GIT_WORK_TREE
+set-vars "$GIT_WORK_TREE"
 
 while (( "$#" ))
 do
@@ -33,7 +33,7 @@ do
         # Tell which version we are running
         if [[ "$1" == "-v" ]] || [[ "$1" == "--version" ]] || [[ "$1" == "version" ]]
         then
-          echo "$(basename $0) version: $VERSION"
+          echo -e "$(basename "$0")" version: "$VERSION"
           exit 0
         fi
 
@@ -42,10 +42,10 @@ do
           if [[ -z "$GIT_WORK_TREE" ]]
           then
             echo -e "Using $1 as a work dir"
-            export GIT_WORK_TREE="${argument}"
+            export GIT_WORK_TREE="$1"
           else
             echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
-            export GIT_WORK_TREE="${HOME}"
+            export GIT_WORK_TREE="$HOME"
           fi
         else
           if [[ -z "$GIT_WORK_TREE" ]]
@@ -56,7 +56,7 @@ do
         fi
 
         # Check if arguments were passed
-        if [[ ${argument} == "push-remote" ]]
+        if [[ $1 == "push-remote" ]]
         then
           echo -ne "\nPushing to remote repos: "
           if push-remote "${GIT_WORK_TREE}"
@@ -94,13 +94,13 @@ do
         # Calling check-add-file function
         if [[ $1 == "add-file" ]]
         then
-            check-add-file $2 && shift
+            check-add-file "$2" && shift
         fi
 
         # Calling check-add-file function
         if [[ $1 == "del-file" ]]
         then
-            check-del-file $2 && shift
+            check-del-file "$2" && shift
         fi
 
         shift
@@ -122,7 +122,7 @@ do
 for file in functions arguments
 do
   echo -n "Importing file $file: "
-  if source "$(dirname $0)/$file.sh" >& /dev/null
+  if source "$(dirname "$0")/$file.sh" >& /dev/null
   then
     echo "OK"
   else
