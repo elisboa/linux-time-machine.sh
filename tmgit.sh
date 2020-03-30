@@ -42,7 +42,7 @@ do
           if [[ -z "$GIT_WORK_TREE" ]]
           then
             echo -e "Using $1 as a work dir"
-            export GIT_WORK_TRSAIU github.com/elisboa/linux-time.machine.sh - só baixar que já tá atualizadoEE="${argument}"
+            export GIT_WORK_TREE="${argument}"
           else
             echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
             export GIT_WORK_TREE="${HOME}"
