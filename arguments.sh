@@ -15,7 +15,7 @@ function push-remote () {
 		#$TMGIT push ${remote_repo} --mirror 2> /dev/null
 		#... and push local branches, using update
 		$TMGIT push -u --set-upstream "$remote_repo" "${CUR_BRANCH}"
-		$TMGIT push -u $remote_repo HEAD
+		$TMGIT push -u $remote_repo HEAD # make sure to upload any branch where HEAD is pointed to
 		$TMGIT remote -v
 
 		#$TMGIT push ${remote_repo} -u --follow-tags 2> /dev/null
