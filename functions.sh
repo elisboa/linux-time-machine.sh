@@ -11,7 +11,7 @@
 # Set environment vars and aliases
 function set-vars () {
 
-export VERSION="0.9.7"
+export VERSION="0.9.8"
 
 export GIT_AUTHOR_NAME="Tmgit Script"
 export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
@@ -321,7 +321,7 @@ fi
 function add-file() {
 
   # Core code
-  if "$TMGIT" add -f "$1"
+  if $TMGIT add -f "$1"
   then
     echo -e "SUCCESS"
   else

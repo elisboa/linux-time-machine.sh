@@ -1,3 +1,6 @@
+**Released new version: 0.9.8**
+- fixed tmgit add-file bug
+
 **Released new version: 0.9.7**
 - fixed push-remote where it only sent to "origin", now it sends to every remotes found
 
