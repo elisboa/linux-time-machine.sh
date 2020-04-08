@@ -336,7 +336,7 @@ function add-file() {
 function del-file() {
 
   # Core code
-  if $TMGIT -f -r "$1"
+  if $TMGIT rm --cached -r -f "$1"
   then
     echo -e "SUCCESS"
   else
