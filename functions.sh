@@ -352,10 +352,10 @@ function check-add-file() {
 if [[ -n $1 ]]
 then
 
-  if [[ -f $1 ]]
+  if [[ -f "$GIT_WORK_TREE"/"$1" ]]
   then
     export ADD_FILE_TYPE="file"
-  elif [[ -d $1 ]]
+  elif [[ -d "$GIT_WORK_TREE"/"$1" ]]
   then 
     export ADD_FILE_TYPE="directory"
   else
