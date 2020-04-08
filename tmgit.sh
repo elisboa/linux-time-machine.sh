@@ -21,7 +21,7 @@ function main () {
 
 
 # set-vars must be called before anything 
-set-vars "$GIT_WORK_TREE"
+#set-vars "$GIT_WORK_TREE"
 
 while (( "$#" ))
 do
@@ -39,25 +39,39 @@ do
 
         if [[ -d "$1" ]]
         then
+
           if [[ -z "$GIT_WORK_TREE" ]]
           then
             echo -e "Using $1 as a work dir"
             export GIT_WORK_TREE="$1"
+          elif [[ -n "$GIT_WORK_TREE" ]]
+          then
+            echo -e "Git Work Tree is $GIT_WORK_TREE"
           else
             echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
             export GIT_WORK_TREE="$HOME"
           fi
+
         else
+
           if [[ -z "$GIT_WORK_TREE" ]]
           then
             echo -e "Using $HOME as GIT_WORK_TREE. If it's not what you expected, try passing it as your first argument"
             export GIT_WORK_TREE="${HOME}"
           fi
+
+          # maybe set-vars should be called here
+          set-vars "$GIT_WORK_TREE"
+                
         fi
 
         # Check if arguments were passed
         if [[ $1 == "push-remote" ]]
         then
+
+          # maybe set-vars should be called here
+          set-vars "$GIT_WORK_TREE"
+
           echo -ne "\nPushing to remote repos: "
           if push-remote "${GIT_WORK_TREE}"
           then
@@ -71,6 +85,10 @@ do
 
         if [[ "$1" == "mirror-mode" ]]
         then
+
+          # maybe set-vars should be called here
+          set-vars "$GIT_WORK_TREE"
+
           echo -e "Entering mirror mode"
           if mirror-mode "$GIT_WORK_TREE" "$@"
           then
@@ -94,18 +112,25 @@ do
         # Calling check-add-file function
         if [[ $1 == "add-file" ]]
         then
-            check-add-file "$2" && shift
+          # maybe set-vars should be called here
+          set-vars "$GIT_WORK_TREE"
+          check-add-file "$2" && shift
         fi
 
         # Calling check-add-file function
         if [[ $1 == "del-file" ]]
         then
-            check-del-file "$2" && shift
+          # maybe set-vars should be called here
+          set-vars "$GIT_WORK_TREE"
+          check-del-file "$2" && shift
         fi
 
         shift
 
       done
+
+      # maybe set-vars should be called here
+      set-vars "$GIT_WORK_TREE"
 
       check-tmgit-repo "${GIT_WORK_TREE}"
 
