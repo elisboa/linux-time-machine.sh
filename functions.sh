@@ -38,6 +38,7 @@ export GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
   # Here we can set some parameter for our git
   GIT_ARGS="--no-pager"
   TMGIT="${GIT_BIN} ${GIT_ARGS}"
+  export TMGIT
 
     ## Set vars
     # Check which branch we are
