@@ -1,3 +1,9 @@
+**Released new version: 0.9.9**
+- fixed argument parsing
+- fixed add-file function
+- fixed del-file function
+- fixed set-vars function calls
+
 **Released new version: 0.9.8**
 - fixed tmgit add-file bug
 
