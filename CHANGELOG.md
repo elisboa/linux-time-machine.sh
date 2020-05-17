@@ -1,3 +1,6 @@
+**Released new version: 0.10**
+- Now `push-remote` argument pushes all branches to remote repositories, not only the current one
+
 **Released new version: 0.9.9**
 - fixed argument parsing
 - fixed add-file function

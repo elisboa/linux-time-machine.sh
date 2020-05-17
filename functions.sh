@@ -11,7 +11,7 @@
 # Set environment vars and aliases
 function set-vars () {
 
-export VERSION="0.9.9"
+export VERSION="0.10"
 
 export GIT_AUTHOR_NAME="Tmgit Script"
 export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
@@ -27,7 +27,7 @@ else
 fi
 
 export GIT_WORK_TREE
-export GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
+exort GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
 
   ## Set aliases
   # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
