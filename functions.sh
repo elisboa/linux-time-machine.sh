@@ -27,7 +27,7 @@ else
 fi
 
 export GIT_WORK_TREE
-exort GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
+export GIT_DIR="${GIT_WORK_TREE}/.tmgit/.git"
 
   ## Set aliases
   # Creates an alias to tmgit, so we can use tmgit instead of git to access our customized git environment
