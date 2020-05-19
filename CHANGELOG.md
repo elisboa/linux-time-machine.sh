@@ -1,3 +1,6 @@
+**Released new version: 0.10.1**
+- fixed typo on GIT_DIR variable export
+
 **Released new version: 0.10**
 - Now `push-remote` argument pushes all branches to remote repositories, not only the current one
 
