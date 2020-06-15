@@ -11,7 +11,7 @@
 # Set environment vars and aliases
 function set-vars () {
 
-export VERSION="0.10.2"
+export VERSION="0.10.3"
 
 export GIT_AUTHOR_NAME="Tmgit Script"
 export GIT_COMMITTER_NAME="${GIT_AUTHOR_NAME}"
