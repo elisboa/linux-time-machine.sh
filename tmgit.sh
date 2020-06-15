@@ -33,6 +33,7 @@ do
         # Tell which version we are running
         if [[ "$1" == "-v" ]] || [[ "$1" == "--version" ]] || [[ "$1" == "version" ]]
         then
+          set-vars
           echo -e "$(basename "$0")" version: "$VERSION"
           exit 0
         fi
