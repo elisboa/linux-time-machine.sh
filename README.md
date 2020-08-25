@@ -19,11 +19,11 @@ You can use an argument to version all the files of a given dir. To do so, just 
 ```
 
 Currently the following arguments are supported:
-* push-remote — pushes your local git repository to all your configured remote repositories
-* version-all — automatically adds every single file on the specified dir before versioning. This is useful if you have a /etc or a docs/ dir which you want do save everything
-* mirror-mode — instead of version your current changes, it goes back in time and resets last valid branch. You can pass a custom branch or a (part of a) commit hash too. This feature is available only on `dev` brach actually
+* `push-remote` — pushes your local git repository to all your configured remote repositories
+* `version-all` — automatically adds every single file on the specified dir before versioning. This is useful if you have a /etc or a docs/ dir which you want do save everything
+* `mirror-mode` — instead of version your current changes, it goes back in time and resets last valid branch. You can pass a custom branch or a (part of a) commit hash too. This feature is available only on `dev` brach actually
 
-PS: the custom dir MUST BE the first argument. By default it uses your $HOME dir, if no custom_dir is specified.
+PS: the `custom_dir` MUST BE the first argument. By default, it uses your `$HOME` dir if no `custom_dir` is specified.
 
 ## Scheduling with cron
 
@@ -34,7 +34,7 @@ If you must, you should edit your crontab to add the script, so you can run it a
 
 ## Adding files to your repository
 
-Now you can use `add-file` argument to automatically add files or folders, like this:
+You can use `add-file` argument to automatically add files or folders, like this:
 ```
 ./tmgit.sh add-file file_or_folder
 ```
@@ -63,6 +63,9 @@ alias tmgit='git --git-dir $HOME/.tmgit/.git --work-tree=\$HOME'
 tmgit rm -f --cached -r my_file
 ```
 It will not remove the dir or file from disk, only from your tmgit repository :)
+
+PS: Both options `add-file` and `del-file` do not support regular expressions yet :-(
+
 
 ## Background story
 
