@@ -115,7 +115,9 @@ do
         then
           # maybe set-vars should be called here
           set-vars "$GIT_WORK_TREE"
-          check-add-file "$2" && shift
+          shift
+          echo -e "Starting add-file $@"
+          add-file "$@"
         fi
 
         # Calling check-add-file function

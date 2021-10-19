@@ -322,7 +322,7 @@ fi
 function add-file() {
 
   # Core code
-  if $TMGIT add -f "$1"
+  if $TMGIT add -f "$@"
   then
     echo -e "SUCCESS"
   else
