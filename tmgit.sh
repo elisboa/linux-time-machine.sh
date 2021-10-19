@@ -124,7 +124,8 @@ do
         then
           # maybe set-vars should be called here
           set-vars "$GIT_WORK_TREE"
-          check-del-file "$2" && shift
+          shift
+          del-file "$@"
         fi
 
         shift
