@@ -322,7 +322,7 @@ fi
 function add-file() {
 
   # Core code
-  if $TMGIT add -f "$1"
+  if $TMGIT add -f "$@"
   then
     echo -e "SUCCESS"
   else
@@ -336,7 +336,7 @@ function add-file() {
 function del-file() {
 
   # Core code
-  if $TMGIT rm --cached -r -f "$1"
+  if $TMGIT rm --cached -r -f "$@"
   then
     echo -e "SUCCESS"
   else

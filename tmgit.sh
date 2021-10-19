@@ -110,20 +110,22 @@ do
           export VERSION_ALL="FALSE"
         fi
 
-        # Calling check-add-file function
+        # Calling add-file function
         if [[ $1 == "add-file" ]]
         then
           # maybe set-vars should be called here
           set-vars "$GIT_WORK_TREE"
-          check-add-file "$2" && shift
+          shift
+          add-file "$@"
         fi
 
-        # Calling check-add-file function
+        # Calling add-file function
         if [[ $1 == "del-file" ]]
         then
           # maybe set-vars should be called here
           set-vars "$GIT_WORK_TREE"
-          check-del-file "$2" && shift
+          shift
+          del-file "$@"
         fi
 
         shift
