@@ -110,7 +110,7 @@ do
           export VERSION_ALL="FALSE"
         fi
 
-        # Calling check-add-file function
+        # Calling add-file function
         if [[ $1 == "add-file" ]]
         then
           # maybe set-vars should be called here
@@ -119,7 +119,7 @@ do
           add-file "$@"
         fi
 
-        # Calling check-add-file function
+        # Calling add-file function
         if [[ $1 == "del-file" ]]
         then
           # maybe set-vars should be called here
